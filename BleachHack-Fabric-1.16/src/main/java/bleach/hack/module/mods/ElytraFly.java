@@ -8,6 +8,7 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.setting.base.SettingToggle;
 import org.apache.commons.lang3.RandomUtils;
 
 import com.google.common.eventbus.Subscribe;
@@ -30,15 +31,17 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
+
 public class ElytraFly extends Module {
 
 	public ElytraFly() {
 		super("ElytraFly", KEY_UNBOUND, Category.MOVEMENT, "Improves the elytra",
-				new SettingMode("Mode", "AutoBoost", "Boost", "Control", "BruhFly", "Pak\u00e8tFly").withDesc("Elytrafly mode"),
+				new SettingMode("Mode", "AutoBoost", "Boost", "Control", "BruhFlight", "Packet").withDesc("Elytrafly mode"),
 				new SettingSlider("Boost", 0, 0.15, 0.05, 2).withDesc("Boost speed"),
 				new SettingSlider("MaxBoost", 0, 5, 2.5, 1).withDesc("Max boost speed"),
 				new SettingSlider("Speed", 0, 5, 0.8, 2).withDesc("Speed for all the other modes"),
-				new SettingSlider("Packets", 1, 10, 2, 0).withDesc("How many packets to send in packet mode"));
+				new SettingSlider("Packets", 1, 10, 2, 0).withDesc("How many packets to send in packet mode"),
+				new SettingToggle("Invert Backwards Turning", true).withDesc("If you are moving to the left or right while going backwards, it will invert the direction so that it becomes easier to fly."));
 	}
 
 	@Subscribe
@@ -88,6 +91,15 @@ public class ElytraFly extends Module {
 				break;
 			case 2:
 				if (mc.player.isFallFlying()) {
+					if (mc.options.keyLeft.isPressed() && (mc.options.keyForward.isPressed())) vec3d = vec3d.rotateY((float) Math.toRadians(-45));
+					if (mc.options.keyRight.isPressed() && (mc.options.keyForward.isPressed())) vec3d = vec3d.rotateY((float) Math.toRadians(45));
+					if (getSetting(5).asToggle().state) {
+						if (mc.options.keyLeft.isPressed() && (mc.options.keyBack.isPressed())) vec3d = vec3d.rotateY(-(float) Math.toRadians(135));
+						if (mc.options.keyRight.isPressed() && (mc.options.keyBack.isPressed())) vec3d = vec3d.rotateY(-(float) Math.toRadians(-135));
+					} else {
+						if (mc.options.keyLeft.isPressed() && (mc.options.keyBack.isPressed())) vec3d = vec3d.rotateY(-(float) Math.toRadians(45));
+						if (mc.options.keyRight.isPressed() && (mc.options.keyBack.isPressed())) vec3d = vec3d.rotateY(-(float) Math.toRadians(-45));
+					}
 					if (mc.options.keyBack.isPressed()) vec3d = vec3d.multiply(-1);
 					if (mc.options.keyLeft.isPressed()) vec3d = vec3d.rotateY((float) Math.toRadians(90));
 					else if (mc.options.keyRight.isPressed()) vec3d = vec3d.rotateY(-(float) Math.toRadians(90));
