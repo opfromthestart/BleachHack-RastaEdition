@@ -18,7 +18,7 @@ public class DiscordRPCManager {
 		BleachHack.logger.info("Initing Discord RPC...");
 
 		DiscordRPC.discordInitialize(id, new DiscordEventHandlers.Builder().setReadyEventHandler(user -> {
-			BleachHack.logger.info(user.username + "#" + user.discriminator + " is big gay");
+			// BleachHack.logger.info(user.username + "#" + user.discriminator + " is big gay");
 		}).build(), true);
 	}
 
