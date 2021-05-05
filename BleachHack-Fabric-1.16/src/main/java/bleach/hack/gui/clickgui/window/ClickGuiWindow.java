@@ -44,9 +44,9 @@ public abstract class ClickGuiWindow extends Window {
 
 	protected void drawBar(MatrixStack matrix, int mouseX, int mouseY, TextRenderer textRend) {
 		/* background */
-		DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, 0xff55FF55);
+		DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, 0xff55FF55);
 		DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, 0xff55FF55);
-		DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, 0xff55FF55);
+		DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, 0xff55FF55);
 		DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, 0xff55FF55);
 
 		// DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, 0x90606090);
