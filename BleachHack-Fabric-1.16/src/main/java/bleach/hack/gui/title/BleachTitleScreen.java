@@ -71,7 +71,7 @@ public class BleachTitleScreen extends WindowScreen {
 		addWindow(new Window(width / 8,
 				height / 8,
 				width / 8 + (width - width / 4),
-				height / 8 + (height - height / 4), "BleachHack", new ItemStack(Items.MUSIC_DISC_CAT)));
+				height / 8 + (height - height / 4), "BleachHack CupEdition", new ItemStack(Items.MUSIC_DISC_CAT)));
 
 		int w = getWindow(0).x2 - getWindow(0).x1;
 		int h = getWindow(0).y2 - getWindow(0).y1;
@@ -173,6 +173,7 @@ public class BleachTitleScreen extends WindowScreen {
 		getWindow(1).buttons.add(
 				new WindowButton(105, 115, 195, 135, "Github", () -> {
 					Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/"));
+					Util.getOperatingSystem().open(URI.create("https://github.com/CUPZYY/BleachHack-CupEdition/"));
 				}));
 
 		if (version == null) {
@@ -197,9 +198,10 @@ public class BleachTitleScreen extends WindowScreen {
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrix);
 
-		int copyWidth = this.textRenderer.getWidth("Copyright Mojang AB. Do not distribute!") + 2;
+		int copyWidth = this.textRenderer.getWidth("Not copyright Mojang AB. Do distribute!") + 2;
 		//System.out.println(versions);
-		textRenderer.drawWithShadow(matrix, "Copyright Mojang AB. Do not distribute!", width - copyWidth, height - 10, -1);
+		textRenderer.drawWithShadow(matrix, "Not copyright Mojang AB. Do distribute!", width - copyWidth, height - 10, -1);
+		textRenderer.drawWithShadow(matrix, "BH CupEdition: " + BleachHack.VERSION, 4, height - 40, -1);
 		textRenderer.drawWithShadow(matrix, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
 				4, height - 30, -1);
 		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
@@ -227,27 +229,19 @@ public class BleachTitleScreen extends WindowScreen {
 
 			// drawString(this.font, "BleachHack", (x + w/2 - 81)/3, (y + h/4 - 15)/3,
 			// 0xffc0e0);
+
 			int[] intarray = { 7, 13, 16, 22, 28, 34, 40, 46, 52, 58 };
 			String[] bruh = { "B", "l", "e", "a", "c", "h", "H", "a", "c", "k" };
 			for (int i = 0; i < bruh.length; i++) {
-				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w / 2 - 81) / 3 + intarray[i] - 8, (y + h / 4 - 15) / 3, UI.getRainbowFromSettings(i * 75));
+				drawStringWithShadow(matrix, this.textRenderer, bruh[i], (x + w / 2 - 81) / 3 + intarray[i] - 8, (y + h / 4 - 10) / 3, UI.getRainbowFromSettings(i * 270));
+			}
+			int[] intarrayCup = {7, 13, 19, 25, 31, 37, 39, 43, 45, 51};
+			String[] bruhCup = {"C", "u", "p", "E", "d", "i", "t", "i", "o", "n"};
+			for (int i = 0; i < bruh.length; i++) {
+				drawStringWithShadow(matrix, this.textRenderer, bruhCup[i], (x + w / 2 - 72) / 3 + intarrayCup[i] - 8, (y + h / 4 + 20) / 3, UI.getRainbowFromSettings(i * 270));
 			}
 
 			matrix.scale(1f / 3f, 1f / 3f, 0f);
-
-			/* Version Text */
-			matrix.scale(1.5f, 1.5f, 1.5f);
-			drawCenteredString(matrix, this.textRenderer, BleachHack.VERSION, (int) ((x + w / 2) / 1.5), (int) ((y + h / 4 + 6) / 1.5), 0xffc050);
-			matrix.scale(1f / 1.5f, 1f / 1.5f, 1f / 1.5f);
-
-			/* Splash Text */
-			matrix.translate(x + w / 2 + 80, y + h / 4 + 8, 0.0F);
-			matrix.multiply(new Vector3f(0.0F, 0.0F, 1.0F).getDegreesQuaternion(-20.0F));
-			float float_4 = 1.8F - MathHelper.abs(MathHelper.sin(Util.getMeasuringTimeMs() % 1000L / 1000.0F * 6.2831855F) * 0.1F);
-			float_4 = float_4 * 60.0F / (textRenderer.getWidth(splash) + 32);
-			matrix.scale(float_4, float_4, float_4);
-			DrawableHelper.drawCenteredString(matrix, textRenderer, splash, 0, -8, 16776960);
-			matrix.pop();
 
 			if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
 				drawStringWithShadow(matrix, textRenderer, "\u00a76[ \u00a7nUpdate\u00a76 ]", getWindow(0).x1 + 3, getWindow(0).y2 - 12, -1);
@@ -256,7 +250,7 @@ public class BleachTitleScreen extends WindowScreen {
 			int x = getWindow(1).x1;
 			int y = getWindow(1).y1;
 
-			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack version!", x + 100, y + 15, -1);
+			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack-CupEdition version!", x + 100, y + 15, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7eClick update to auto-update", x + 100, y + 28, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7eOr Github to manually update", x + 100, y + 38, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7c\u00a7o" + updaterText, x + 100, y + 58, -1);

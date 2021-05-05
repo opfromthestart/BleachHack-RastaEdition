@@ -1,11 +1,3 @@
-/*
- * This file is part of the BleachHack distribution (https://github.com/BleachDrinker420/BleachHack/).
- * Copyright (c) 2021 Bleach and contributors.
- *
- * This source code is subject to the terms of the GNU General Public
- * License, version 3. If a copy of the GPL was not distributed with this
- * file, You can obtain one at: https://www.gnu.org/licenses/gpl-3.0.txt
- */
 package bleach.hack.gui.clickgui;
 
 import java.util.ArrayList;
@@ -43,8 +35,7 @@ public abstract class ClickGuiScreen extends WindowScreen {
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrix);
-		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x305090);
-		textRenderer.draw(matrix, "BleachHack-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 2, 2, 0x6090d0);
+		textRenderer.draw(matrix, "BleachHack-CupEdition-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x55FF55);
 
 		for (Window w : getWindows()) {
 			if (w instanceof ClickGuiWindow) {

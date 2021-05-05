@@ -95,19 +95,11 @@ public class UI extends Module {
 		int arrayCount = 0;
 		if (getSetting(0).asToggle().state && !mc.options.debugEnabled) {
 			List<Text> lines = new ArrayList<>();
-
 			if (getSetting(0).asToggle().getChild(3).asToggle().state) {
-				int watermarkMode = getSetting(0).asToggle().getChild(3).asToggle().getChild(0).asMode().mode;
-
-				if (watermarkMode == 0) {
-					MutableText text1 = new LiteralText("> Bleach").styled(s -> s.withColor(TextColor.fromRgb(0xffbf30)));
-					MutableText text2 = new LiteralText("Hack " + BleachHack.VERSION).styled(s -> s.withColor(TextColor.fromRgb(0xffafcc)));
-
-					lines.add(0, text1.append(text2));
-				} else {
-					lines.add(0, new LiteralText("\u00a7a> BleachHack " + BleachHack.VERSION));
+					lines.add(0, new LiteralText("\u00a7aBleachHack CupEdition " + BleachHack.VERSION));
 				}
-			}
+
+
 
 			if (getSetting(0).asToggle().state) {
 				for (Module m : ModuleManager.getModules())
