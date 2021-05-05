@@ -64,11 +64,11 @@ public class ModuleWindow extends ClickGuiWindow {
 		int curY = 0;
 		for (Entry<Module, Boolean> m : mods.entrySet()) {
 			if (mouseOver(x, y + curY, x + len, y + 12 + curY)) {
-				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x70303070);
+				DrawableHelper.fill(matrix, x, y + curY, x + len, y + 12 + curY, 0x7047ba47);
 			}
 
 			textRend.drawWithShadow(matrix, textRend.trimToWidth(m.getKey().getName(), len),
-					x + 2, y + 2 + curY, m.getKey().isEnabled() ? 0x70efe0 : 0xc0c0c0);
+					x + 2, y + 2 + curY, m.getKey().isEnabled() ? 0x55FF55 : 0xc0c0c0);
 
 			// If they match: Module gets marked red
 			if (searchedModules != null && searchedModules.contains(m.getKey()) && ModuleManager.getModule("ClickGui").getSetting(1).asToggle().state) {
