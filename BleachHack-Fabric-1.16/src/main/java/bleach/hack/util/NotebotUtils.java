@@ -11,7 +11,6 @@ package bleach.hack.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -20,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import bleach.hack.util.file.BleachGithubReader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -36,7 +36,7 @@ public class NotebotUtils {
 	public static void downloadSongs(boolean log) {
 		try {
 			FileUtils.copyURLToFile(
-					new URL("https://github.com/BleachDrinker420/BH-resources/raw/main/notebot/songs.zip"),
+					BleachGithubReader.stringsToURI("notebot", "songs.zip").toURL(),
 					BleachFileMang.stringsToPath("notebot", "songs.zip").toFile());
 			ZipFile zip = new ZipFile(BleachFileMang.stringsToPath("notebot", "songs.zip").toFile());
 			Enumeration<? extends ZipEntry> files = zip.entries();
