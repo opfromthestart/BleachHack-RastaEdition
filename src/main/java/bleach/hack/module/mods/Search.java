@@ -92,7 +92,8 @@ public class Search extends Module {
 						Blocks.EMERALD_ORE,
 						Blocks.DIAMOND_BLOCK,
 						Blocks.EMERALD_BLOCK,
-						Blocks.ANCIENT_DEBRIS).withDesc("Edit the Search blocks"));
+						Blocks.ANCIENT_DEBRIS,
+						Blocks.END_PORTAL_FRAME).withDesc("Edit the Search blocks"));
 	}
 	@Override
 	public void onDisable() {
