@@ -76,12 +76,12 @@ public class UI extends Module {
 						new SettingToggle("Ping", true).withDesc("Shows your ping"), // 1-1
 						new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 1-2
 						new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 1-3
-						new SettingToggle("Server", false).withDesc("Shows the current server you are on"), // 1-4
+						new SettingToggle("Server", true).withDesc("Shows the current server you are on"), // 1-4
 						new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 1-5
-								new SettingToggle("Time Zone", true).withDesc("Shows your time zone in the time"), // 1-5-0
+								new SettingToggle("Time Zone", false).withDesc("Shows your time zone in the time"), // 1-5-0
 								new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 1-5-1
-						new SettingToggle("Chunk Size", false).withDesc("Shows the data size of the chunk you are standing in"), // 1-6
-						new SettingMode("Corner", "BL", "TR", "BR").withDesc("Where on the screen to show the info")), // 1-7
+						new SettingToggle("Chunk Size", true).withDesc("Shows the data size of the chunk you are standing in"), // 1-6
+						new SettingMode("Corner", "TR", "BL", "BR").withDesc("Where on the screen to show the info")), // 1-7
 				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), //2
 				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 3
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")), // 3-0
