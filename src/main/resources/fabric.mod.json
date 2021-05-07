@@ -1,16 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "bleachhack",
+  "id": "bleachhack-cupedition",
   "version": "${version}",
 
-  "name": "BleachHack",
+  "name": "BleachHack CupEdition",
   "description": "gamer hack",
   "authors": [
-    "Bleach#0136"
+    "BleachDrinker420",
+    "CUPZYY"
   ],
   "contact": {
-    "homepage": "https://github.com/BleachDrinker420/",
-    "sources": "https://github.com/BleachDrinker420/BleachHack"
+    "homepage": "https://github.com/CUPZYY/",
+    "sources": "https://github.com/CUPZYY/BleachHack-CupEdition"
   },
 
   "license": "CC0-1.0",
