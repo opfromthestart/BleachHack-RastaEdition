@@ -113,7 +113,7 @@ public class UI extends Module {
 			boolean outer = getSetting(0).asToggle().getChild(1).asToggle().state;
 			boolean fill = getSetting(0).asToggle().getChild(2).asToggle().state;
 			for (Text t : lines) {
-				int color = getRainbowFromSettings(arrayCount * 40);
+				int color = getRainbowFromSettings(arrayCount * 160);
 
 				if (fill) {
 					DrawableHelper.fill(event.matrix, 0, arrayCount * 10, mc.textRenderer.getWidth(t) + 3 + inner, 10 + (arrayCount * 10), 0x70003030);
