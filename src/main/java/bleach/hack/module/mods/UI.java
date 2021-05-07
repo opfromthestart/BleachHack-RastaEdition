@@ -302,8 +302,8 @@ public class UI extends Module {
 		int infoMode = getSetting(1).asToggle().getChild(7).asMode().mode;
 		for (String s : infoList) {
 			mc.textRenderer.drawWithShadow(event.matrix, s,
-					infoMode == 0 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
-							infoMode == 1 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
+					infoMode == 1 ? 2 : mc.getWindow().getScaledWidth() - mc.textRenderer.getWidth(s) - 2,
+							infoMode == 0 ? 2 + (count2 * 10) : mc.getWindow().getScaledHeight() - 9 - (count2 * 10), 0xa0a0a0);
 			count2++;
 		}
 	}
