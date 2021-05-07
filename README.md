@@ -21,8 +21,8 @@ Credits to [@BleachDrinker420](https://github.com/BleachDrinker420)
 
 ## Installation
 
-Download [fabric for minecraft 1.16/1.17](https://fabricmc.net/use/).
-Download the [latest version of BleachHack CupEdition](https://bleachhack.github.io)
+Download [fabric for minecraft 1.16](https://fabricmc.net/use/).
+Download the [latest version of BleachHack CupEdition](https://github.com/CUPZYY/BleachHack-CupEdition/releases)
 
 Put the bleachhack cupedition jar file in the mods folder in .minecraft
 
