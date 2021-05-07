@@ -106,8 +106,8 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		super.render(matrix, mouseX, mouseY, delta);
 		
 		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
-			textRenderer.drawWithShadow(matrix, "Current prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x99ff99);
-			textRenderer.drawWithShadow(matrix, "Use " + Command.PREFIX + "clickgui to reset the clickgui", 2, height - 10, 0x9999ff);
+			textRenderer.drawWithShadow(matrix, "Current command prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x16b1db);
+			textRenderer.drawWithShadow(matrix, "Use \"" + Command.PREFIX + "clickgui reset\" to reset the clickgui", 2, height - 10, 0x9703ab);
 		}
 	}
 }
