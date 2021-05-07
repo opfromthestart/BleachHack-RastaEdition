@@ -7,9 +7,13 @@
 
 My edition of bleachhack
 
-Works on fabric 1.16 & 1.17 Snapshots.
+Works on fabric 1.16.
 
 Credits to [@BleachDrinker420](https://github.com/BleachDrinker420)
+
+## Images
+![ClickGUI](https://i.imgur.com/v3EcVXH.png)
+![GamePlay](https://i.imgur.com/SqbinM6.jpg)
 
 ## The original BleachHack
 > Website: https://bleachhack.github.io/  
