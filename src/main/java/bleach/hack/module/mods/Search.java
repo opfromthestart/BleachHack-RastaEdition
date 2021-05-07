@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import bleach.hack.setting.base.SettingColor;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
@@ -84,6 +85,8 @@ public class Search extends Module {
 				new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks").withChildren(
 						new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers"),
 						new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers")),
+				new SettingToggle("ManualColor", false).withDesc("Makes it so that it doesn't automatically picks a color based on the color of the block").withChildren(
+						new SettingColor("Color", 0.5f, 0.5f, 0.5f, false)),
 				SettingLists.newBlockList("Edit Blocks", "Edit Search Blocks",
 						Blocks.DIAMOND_ORE,
 						Blocks.EMERALD_ORE,
@@ -91,7 +94,6 @@ public class Search extends Module {
 						Blocks.EMERALD_BLOCK,
 						Blocks.ANCIENT_DEBRIS).withDesc("Edit the Search blocks"));
 	}
-
 	@Override
 	public void onDisable() {
 		reset();
@@ -101,7 +103,7 @@ public class Search extends Module {
 
 	@Subscribe
 	public void onTick(EventTick event) {
-		Set<Block> blockList = getSetting(4).asList(Block.class).getItems();
+		Set<Block> blockList = getSetting(5).asList(Block.class).getItems();
 
 		if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
 			reset();
@@ -118,7 +120,7 @@ public class Search extends Module {
 		while (!queuedBlocks.isEmpty()) {
 			Pair<BlockPos, BlockState> blockPair = queuedBlocks.poll();
 
-			if (getSetting(4).asList(Block.class).contains(blockPair.getRight().getBlock())) {
+			if (getSetting(5).asList(Block.class).contains(blockPair.getRight().getBlock())) {
 				foundBlocks.add(blockPair.getLeft());
 			} else {
 				foundBlocks.remove(blockPair.getLeft());
@@ -194,46 +196,84 @@ public class Search extends Module {
 
 		for (BlockPos pos : foundBlocks) {
 			BlockState state = mc.world.getBlockState(pos);
+			if (!getSetting(4).asToggle().state) {
+				int color = state.getTopMaterialColor(mc.world, pos).color;
+				float red = ((color & 0xff0000) >> 16) / 255f;
+				float green = ((color & 0xff00) >> 8) / 255f;
+				float blue = (color & 0xff) / 255f;
+				VoxelShape voxelShape = state.getOutlineShape(mc.world, pos);
+				if (voxelShape.isEmpty()) {
+					voxelShape = VoxelShapes.cuboid(0, 0, 0, 1, 1, 1);
+				}
 
-			int color = state.getTopMaterialColor(mc.world, pos).color;
-			float red = ((color & 0xff0000) >> 16) / 255f;
-			float green = ((color & 0xff00) >> 8) / 255f;
-			float blue = (color & 0xff) / 255f;
+				if (mode == 0 || mode == 2) {
+					float fillAlpha = getSetting(2).asSlider().getValueFloat();
 
-			VoxelShape voxelShape = state.getOutlineShape(mc.world, pos);
-			if (voxelShape.isEmpty()) {
-				voxelShape = VoxelShapes.cuboid(0, 0, 0, 1, 1, 1);
-			}
-			
-			if (mode == 0 || mode == 2) {
-				float fillAlpha = getSetting(2).asSlider().getValueFloat();
+					for (Box box: voxelShape.getBoundingBoxes()) {
+						RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
+					}
+				}
 
-				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(red, green, blue, fillAlpha));
+				if (mode == 0 || mode == 1) {
+					float outlineWidth = getSetting(1).asSlider().getValueFloat();
+
+					for (Box box: voxelShape.getBoundingBoxes()) {
+						RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);
+					}
+				}
+
+				SettingToggle tracers = getSetting(3).asToggle();
+				if (tracers.state) {
+					// This is bad when bobbing is enabled!
+					Vec3d lookVec = new Vec3d(0, 0, 75)
+							.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
+							.rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw()))
+							.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
+
+					RenderUtils.drawLine(
+							lookVec.x, lookVec.y, lookVec.z,
+							pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+							LineColor.single(red, green, blue, (float) tracers.getChild(1).asSlider().getValue()),
+							(float) tracers.getChild(0).asSlider().getValue());
 				}
 			}
-
-			if (mode == 0 || mode == 1) {
-				float outlineWidth = getSetting(1).asSlider().getValueFloat();
-
-				for (Box box: voxelShape.getBoundingBoxes()) {
-					RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(red, green, blue, 1f), outlineWidth);
+			else {
+				float[] rgb = getSetting(4).asToggle().getChild(0).asColor().getRGBFloat();
+				VoxelShape voxelShape = state.getOutlineShape(mc.world, pos);
+				if (voxelShape.isEmpty()) {
+					voxelShape = VoxelShapes.cuboid(0, 0, 0, 1, 1, 1);
 				}
-			}
 
-			SettingToggle tracers = getSetting(3).asToggle();
-			if (tracers.state) {
-				// This is bad when bobbing is enabled!
-				Vec3d lookVec = new Vec3d(0, 0, 75)
-						.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
-						.rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw()))
-						.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
+				if (mode == 0 || mode == 2) {
+					float fillAlpha = getSetting(2).asSlider().getValueFloat();
 
-				RenderUtils.drawLine(
-						lookVec.x, lookVec.y, lookVec.z,
-						pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-						LineColor.single(red, green, blue, (float) tracers.getChild(1).asSlider().getValue()),
-						(float) tracers.getChild(0).asSlider().getValue());
+					for (Box box: voxelShape.getBoundingBoxes()) {
+						RenderUtils.drawBoxFill(box.offset(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], fillAlpha));
+					}
+				}
+
+				if (mode == 0 || mode == 1) {
+					float outlineWidth = getSetting(1).asSlider().getValueFloat();
+
+					for (Box box: voxelShape.getBoundingBoxes()) {
+						RenderUtils.drawBoxOutline(box.offset(pos), QuadColor.single(rgb[0], rgb[1], rgb[2], 1f), outlineWidth);
+					}
+				}
+
+				SettingToggle tracers = getSetting(3).asToggle();
+				if (tracers.state) {
+					// This is bad when bobbing is enabled!
+					Vec3d lookVec = new Vec3d(0, 0, 75)
+							.rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
+							.rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw()))
+							.add(mc.cameraEntity.getPos().add(0, mc.cameraEntity.getEyeHeight(mc.cameraEntity.getPose()), 0));
+
+					RenderUtils.drawLine(
+							lookVec.x, lookVec.y, lookVec.z,
+							pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+							LineColor.single(rgb[0], rgb[1], rgb[2], (float) tracers.getChild(1).asSlider().getValue()),
+							(float) tracers.getChild(0).asSlider().getValue());
+				}
 			}
 		}
 	}
@@ -255,7 +295,7 @@ public class Search extends Module {
 							BlockPos pos = new BlockPos(chunk.getPos().x * 16 + x, y, chunk.getPos().z * 16 + z);
 							BlockState state = chunk.getBlockState(pos);
 
-							if (getSetting(4).asList(Block.class).contains(state.getBlock())) {
+							if (getSetting(5).asList(Block.class).contains(state.getBlock())) {
 								found.add(pos);
 							}
 						}
