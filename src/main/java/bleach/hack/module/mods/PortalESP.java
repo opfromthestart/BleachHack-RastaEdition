@@ -83,7 +83,7 @@ public class PortalESP extends Module {
                 new SettingToggle("Tracers", false).withDesc("Renders a line from the player to all found blocks").withChildren(
                         new SettingSlider("Width", 0.1, 5, 1.5, 1).withDesc("Thickness of the tracers"),
                         new SettingSlider("Opacity", 0, 1, 0.75, 2).withDesc("Opacity of the tracers")),
-                new SettingColor("Color", 0.5f, 0.5f, 0.5f, false));
+                new SettingColor("Color", 0.427450f, 0.02745098f, 0.701960f, false));
         blocklist.add(Blocks.NETHER_PORTAL);
     }
 
