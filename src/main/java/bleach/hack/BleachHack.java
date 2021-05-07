@@ -22,6 +22,7 @@ import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import bleach.hack.command.CommandSuggestor;
 
 public class BleachHack implements ModInitializer {
 
@@ -70,6 +71,7 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readFriends();
 
 		CommandManager.readPrefix();
+		CommandSuggestor.init();
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {
