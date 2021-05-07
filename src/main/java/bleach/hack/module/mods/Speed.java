@@ -25,7 +25,7 @@ public class Speed extends Module {
 	private boolean jumping;
 
 	public Speed() {
-		super("Speed", GLFW.GLFW_KEY_V, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
+		super("Speed", KEY_UNBOUND, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
 				new SettingMode("Mode", "StrafeHop", "Strafe", "OnGround", "MiniHop", "Bhop").withDesc("Speed mode"),
 				new SettingSlider("Strafe", 0.15, 0.4, 0.27, 2).withDesc("Strafe speed"),
 				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround speed"),
