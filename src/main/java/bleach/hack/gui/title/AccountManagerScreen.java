@@ -156,7 +156,7 @@ public class AccountManagerScreen extends WindowScreen {
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrix);
-
+		textRenderer.drawWithShadow(matrix, "BH CupEdition: " + BleachHack.VERSION, 4, height - 40, -1);
 		textRenderer.drawWithShadow(matrix, "Fabric: " + FabricLoader.getInstance().getModContainer("fabricloader").get().getMetadata().getVersion().getFriendlyString(),
 				4, height - 30, -1);
 		textRenderer.drawWithShadow(matrix, "Minecraft: " + SharedConstants.getGameVersion().getName(), 4, height - 20, -1);
