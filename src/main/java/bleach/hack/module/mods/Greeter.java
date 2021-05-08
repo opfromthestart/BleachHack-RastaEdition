@@ -7,7 +7,6 @@ import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
@@ -37,11 +36,9 @@ public class Greeter extends Module {
     }
 
     @Subscribe
-    public void onTick(EventTick event)
-    {
-        if (mc.player.age % (this.getSettings().get(1).asSlider().getValue()*20) == 0 && this.isEnabled())
-        {
-            if(message_queue.size() > 0) {
+    public void onTick(EventTick event) {
+        if (mc.player.age % (this.getSettings().get(1).asSlider().getValue() * 20) == 0 && this.isEnabled()) {
+            if (message_queue.size() > 0) {
                 message = message_queue.get(0);
                 mc.player.sendChatMessage(message);
                 message_queue.remove(0);
@@ -70,7 +67,7 @@ public class Greeter extends Module {
 
     @Subscribe
     public void onPacketRead(EventReadPacket event) {
-        if ((event.getPacket() instanceof PlayerListS2CPacket) && (((PlayerListS2CPacket) event.getPacket()).getAction().name().equals("ADD_PLAYER")) && (getSettings().get(2).asToggle().state)) {
+        if ((event.getPacket() instanceof PlayerListS2CPacket) && (((PlayerListS2CPacket) event.getPacket()).getAction() == PlayerListS2CPacket.Action.ADD_PLAYER && (getSettings().get(2).asToggle().state))) {
             player = ((PlayerListS2CPacket) event.getPacket()).getEntries().get(0).getProfile().getName();
             if (lines.isEmpty()) return;
             if (player == null) return;
@@ -84,8 +81,7 @@ public class Greeter extends Module {
             if (lineCount >= lines.size() - 1) lineCount = 0;
             else lineCount++;
             player = null;
-        }
-        else if ((event.getPacket() instanceof PlayerListS2CPacket) && (((PlayerListS2CPacket) event.getPacket()).getAction().name().equals("REMOVE_PLAYER")) && (getSettings().get(3).asToggle().state)) {
+        } else if ((event.getPacket() instanceof PlayerListS2CPacket) && (((PlayerListS2CPacket) event.getPacket()).getAction() == PlayerListS2CPacket.Action.REMOVE_PLAYER && (getSettings().get(3).asToggle().state))) {
             player = ((PlayerListS2CPacket) event.getPacket()).getEntries().get(0).getProfile().getName();
             if (lines2.isEmpty()) return;
             if (player == null) return;
