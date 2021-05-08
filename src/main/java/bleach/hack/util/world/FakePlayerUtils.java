@@ -10,7 +10,7 @@ public class FakePlayerUtils extends OtherClientPlayerEntity
 {
     public FakePlayerUtils()
     {
-        this(new GameProfile(UUID.fromString("e195d3d7-e6dc-456e-8393-e2f90816a1af"), "Hausemaster"));
+        this(new GameProfile(UUID.fromString("a96eea13-de45-4ba5-b763-a4f7e65adac8"), "CUPZYY"));
     }
 
     public FakePlayerUtils(GameProfile profile)
