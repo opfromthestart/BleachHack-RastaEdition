@@ -94,7 +94,7 @@ public class Greeter extends Module {
             if (getSetting(0).asMode().mode == 0) {
                 message_queue.add(lines2.get(lineCount2).replace("$p", player));
             } else if (getSetting(0).asMode().mode == 1) {
-                message_queue.add(lines2.get(rand.nextInt(lines.size())).replace("$p", player));
+                message_queue.add(lines2.get(rand.nextInt(lines2.size())).replace("$p", player));
             }
             if (lineCount2 >= lines2.size() - 1) lineCount2 = 0;
             else lineCount2++;
