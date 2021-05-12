@@ -8,40 +8,30 @@
  */
 package bleach.hack.module.mods;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
 
 
 import bleach.hack.event.events.EventTick;
-import bleach.hack.event.events.EventWorldRender;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
-import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.setting.other.SettingLists;
 import bleach.hack.setting.other.SettingRotate;
-import bleach.hack.util.Boxes;
-import bleach.hack.util.FabricReflect;
-import bleach.hack.util.render.RenderUtils;
-import bleach.hack.util.render.color.QuadColor;
 import bleach.hack.util.world.WorldUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
 
 public class NetherFreedom extends Module {
 
@@ -58,7 +48,8 @@ public class NetherFreedom extends Module {
                 new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
                 new SettingMode("Sort", "Closest", "Furthest", "Hardness", "None").withDesc("Which order to mine blocks in"),
                 new SettingRotate(false),
-                new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"));
+                new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
+                new SettingToggle("PickOnly", true).withDesc("Only allows pickaxe for mining"));
     }
 
     @Override
@@ -130,9 +121,19 @@ public class NetherFreedom extends Module {
                 Vec3d v = pos.getValue().getLeft();
                 WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(6).asRotate()); }
 
+            
+            Item mainhandItem = mc.player.getMainHandStack().getItem();
+            
+            if(!(mainhandItem == Items.NETHERITE_PICKAXE ||
+                    mainhandItem == Items.DIAMOND_PICKAXE ||
+                    mainhandItem == Items.IRON_PICKAXE ||
+                    mainhandItem == Items.STONE_PICKAXE ||
+                    mainhandItem == Items.WOODEN_PICKAXE ||
+                    mainhandItem == Items.GOLDEN_PICKAXE) && getSetting(8).asToggle().state){
+                return;
+            }
             mc.interactionManager.updateBlockBreakingProgress(pos.getKey(), pos.getValue().getRight());
             renderBlocks.add(pos.getKey());
-
             mc.player.swingHand(Hand.MAIN_HAND);
 
             broken++;
