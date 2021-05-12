@@ -24,10 +24,12 @@ public class MixinClientPlayerInteractionManager {
 	private int getCooldown() {
 		return (ModuleManager.getModule("Nuker").isEnabled()
 				? (int) ModuleManager.getModule("Nuker").getSetting(3).asSlider().getValue()
-						: ModuleManager.getModule("SpeedMine").isEnabled()
+						: ModuleManager.getModule("NetherFreedom").isEnabled()
+				? (int) ModuleManager.getModule("NetherFreedom").getSetting(4).asSlider().getValue() :
+				ModuleManager.getModule("SpeedMine").isEnabled()
 						&& ModuleManager.getModule("SpeedMine").getSetting(0).asMode().mode == 1
 						? (int) ModuleManager.getModule("SpeedMine").getSetting(2).asSlider().getValue()
-								: 5);
+						: 5);
 	}
 
 	@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 3),

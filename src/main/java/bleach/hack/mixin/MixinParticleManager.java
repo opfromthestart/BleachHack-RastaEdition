@@ -62,5 +62,8 @@ public class MixinParticleManager {
 		if (ModuleManager.getModule("Nuker").isEnabled() && ModuleManager.getModule("Nuker").getSetting(8).asToggle().state) {
 			ci.cancel();
 		}
+		if (ModuleManager.getModule("NetherFreedom").isEnabled() && ModuleManager.getModule("NetherFreedom").getSetting(7).asToggle().state) {
+			ci.cancel();
+		}
 	}
 }
