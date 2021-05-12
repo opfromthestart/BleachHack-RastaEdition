@@ -26,6 +26,10 @@ dependencies {
 	//modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation 'com.github.Vatuu:discord-rpc:1.6.2'
+	implementation 'com.github.cabaletta:baritone:1.6.3'
+
+	// This Baritone WILL be included in the jar
+	include 'cabaletta:baritone-api-fabric:1.6.3'
     include 'com.github.Vatuu:discord-rpc:1.6.2'
 }
 

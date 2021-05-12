@@ -1,6 +1,7 @@
 {
   "package": "bleach.hack.module.mods",
   "modules": [
+    "AutoEat",
     "Ambience",
     "AntiChunkBan",
     "AntiHunger",
