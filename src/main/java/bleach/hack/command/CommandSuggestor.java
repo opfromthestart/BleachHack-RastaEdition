@@ -69,6 +69,9 @@ public class CommandSuggestor {
             }
 
             if (selected >= 0 && selected < suggestions.size()) {
+                if (curText.contains(" ")){
+                    return;
+                }
                 field.setSuggestion(suggestions.get(selected).substring(text.length() - Command.PREFIX.length()));
             }
 
@@ -83,6 +86,10 @@ public class CommandSuggestor {
                 int startY = screen.height - Math.min(suggestions.size(), 10) * 12 - 15;
                 for (int i = scroll; i < suggestions.size() && i < scroll + 10; i++) {
                     String suggestion = suggestions.get(i);
+
+                    if (curText.contains(" ")){
+                        suggestion = "";
+                    }
 
                     DrawableHelper.fill(event.matrix, 10, startY, 10 + length + 2, startY + 12, 0xe0000000);
                     MinecraftClient.getInstance().textRenderer.drawWithShadow(
@@ -99,13 +106,13 @@ public class CommandSuggestor {
     @Subscribe
     public void onKeyPress(EventKeyPress.Global event) {
         if (event.getAction() != 0 && !suggestions.isEmpty() && !curText.isEmpty()) {
-            if (event.getKey() == GLFW.GLFW_KEY_DOWN || event.getKey() == GLFW.GLFW_KEY_TAB) {
+            if (event.getKey() == GLFW.GLFW_KEY_DOWN) {
                 selected = selected >= suggestions.size() - 1 ? 0 : selected + 1;
                 updateScroll();
             } else if (event.getKey() == GLFW.GLFW_KEY_UP) {
                 selected = selected <= 0 ? suggestions.size() - 1 : selected - 1;
                 updateScroll();
-            } else if (event.getKey() == GLFW.GLFW_KEY_SPACE) {
+            } else if (event.getKey() == GLFW.GLFW_KEY_TAB) {
                 if (selected >= 0 && selected < suggestions.size()) {
                     TextFieldWidget field = ((AccessorChatScreen) MinecraftClient.getInstance().currentScreen).getChatField();
                     field.setText(field.getText() + suggestions.get(selected).substring(field.getText().length() - Command.PREFIX.length()));
