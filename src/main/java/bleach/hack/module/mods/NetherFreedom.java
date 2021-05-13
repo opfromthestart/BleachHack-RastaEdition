@@ -53,7 +53,7 @@ public class NetherFreedom extends Module {
                         new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
                         SettingLists.newBlockList("Edit Blocks" , "Edit Filtered Blocks", Blocks.OBSIDIAN, Blocks.BEDROCK).withDesc("Edit the filtered blocks")),
                 new SettingRotate(false),
-                new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
+                new SettingToggle("NoParticles", false).withDesc("Removes block breaking particles"),
                 new SettingToggle("PickOnly", true).withDesc("Only allows pickaxe for mining"));
     }
 
