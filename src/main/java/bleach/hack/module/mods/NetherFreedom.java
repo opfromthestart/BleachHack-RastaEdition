@@ -12,6 +12,8 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import bleach.hack.setting.other.SettingLists;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import org.apache.commons.lang3.tuple.Pair;
@@ -47,6 +49,9 @@ public class NetherFreedom extends Module {
                 new SettingSlider("Range", 1, 6, 5.0, 1).withDesc("How far away should it break blocks"),
                 new SettingSlider("Cooldown", 0, 4, 0, 0).withDesc("Cooldown between mining blocks"),
                 new SettingMode("Sort", "Closest", "Furthest", "Hardness", "None").withDesc("Which order to mine blocks in"),
+                new SettingToggle("Filter", true).withDesc("Filters certain blocks").withChildren(
+                        new SettingMode("Mode", "Blacklist", "Whitelist").withDesc("How to handle the list"),
+                        SettingLists.newBlockList("Edit Blocks" , "Edit Filtered Blocks", Blocks.OBSIDIAN, Blocks.BEDROCK).withDesc("Edit the filtered blocks")),
                 new SettingRotate(false),
                 new SettingToggle("NoParticles", false).withDesc("Removes block breaking paritcles"),
                 new SettingToggle("PickOnly", true).withDesc("Only allows pickaxe for mining"));
@@ -111,15 +116,24 @@ public class NetherFreedom extends Module {
 
         int broken = 0;
         for (Entry<BlockPos, Pair<Vec3d, Direction>> pos : blocks.entrySet()) {
+            if (getSetting(6).asToggle().state) {
+                boolean contains = getSetting(6).asToggle().getChild(1).asList(Block.class).contains(mc.world.getBlockState(pos.getKey()).getBlock());
+
+                if ((getSetting(6).asToggle().getChild(0).asMode().mode == 0 && contains)
+                        || (getSetting(6).asToggle().getChild(0).asMode().mode == 1 && !contains)) {
+                    continue;
+                }
+            }
+
             float hardness = mc.world.getBlockState(pos.getKey()).calcBlockBreakingDelta(mc.player, mc.world, pos.getKey());
 
             if (getSetting(0).asMode().mode == 1 && hardness <= 1f && broken > 0) {
                 return;
             }
 
-            if (getSetting(6).asRotate().state) {
+            if (getSetting(7).asRotate().state) {
                 Vec3d v = pos.getValue().getLeft();
-                WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(6).asRotate()); }
+                WorldUtils.facePosAuto(v.x, v.y, v.z, getSetting(7).asRotate()); }
 
             
             Item mainhandItem = mc.player.getMainHandStack().getItem();
@@ -129,7 +143,7 @@ public class NetherFreedom extends Module {
                     mainhandItem == Items.IRON_PICKAXE ||
                     mainhandItem == Items.STONE_PICKAXE ||
                     mainhandItem == Items.WOODEN_PICKAXE ||
-                    mainhandItem == Items.GOLDEN_PICKAXE) && getSetting(8).asToggle().state){
+                    mainhandItem == Items.GOLDEN_PICKAXE) && getSetting(9).asToggle().state){
                 return;
             }
             mc.interactionManager.updateBlockBreakingProgress(pos.getKey(), pos.getValue().getRight());
