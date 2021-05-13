@@ -12,7 +12,7 @@ Works on fabric 1.16.5
 Credits to [@BleachDrinker420](https://github.com/BleachDrinker420)
 
 ## Images
-![ClickGUI](https://i.imgur.com/v3EcVXH.png)
+![ClickGUI](https://i.imgur.com/gCbCclj.png)
 ![GamePlay](https://i.imgur.com/SqbinM6.jpg)
 
 ## The original BleachHack
@@ -25,13 +25,6 @@ Download [fabric for minecraft 1.16](https://fabricmc.net/use/).
 Download the [latest version of BleachHack CupEdition](https://github.com/CUPZYY/BleachHack-CupEdition/releases)
 
 Put the bleachhack cupedition jar file in the mods folder in .minecraft
-
-## Recommended Mods
-
-Here are some nice to have mods, that are compatible with BleachHack CupEdition.
-
-### [Baritone](https://github.com/cabaletta/baritone)
-Baritone allows you to automate tasks such as walking, mining or building.
 
 ## License
 
