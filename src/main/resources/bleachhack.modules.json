@@ -1,5 +1,4 @@
 {
-  "package": "bleach.hack.module.mods",
   "modules": [
     "AutoEat",
     "Ambience",
@@ -9,6 +8,7 @@
     "ArrowJuke",
     "AutoArmor",
     "AutoBedrockBreak",
+    "AutoBedtrap",
     "AutoBuild",
     "AutoIStackDupe",
     "AutoLog",
@@ -95,5 +95,6 @@
     "UI",
     "Xray",
     "Zoom"
-  ]
+  ],
+  "package": "bleach.hack.module.mods"
 }
