@@ -40,18 +40,17 @@ public class AutoBedtrap extends Module {
         assert mc.crosshairTarget != null;
         if (!working) {
             lookingCoords = mc.crosshairTarget.getType() == HitResult.Type.BLOCK ? ((BlockHitResult) mc.crosshairTarget).getBlockPos() : null;
-        }
-        assert lookingCoords != null;
-        assert mc.world != null;
-        try {
-            if (!working) {
-                bed = mc.world.getBlockState(lookingCoords).getBlock().getName().toString().toUpperCase().contains("_BED");
+            if (lookingCoords == null && (!getSetting(1).asToggle().state)) {
+                BleachLogger.errorMessage("Not looking at a bed");
+                setEnabled(false);
+                return;
             }
+            else if (lookingCoords == null) {
+                return;
+            }
+            bed = mc.world.getBlockState(lookingCoords).getBlock().getName().toString().toUpperCase().contains("_BED");
         }
-        catch (NullPointerException e){
-            return;
-        }
-        if (!bed && !getSetting(1).asToggle().state){
+        if ((!bed || lookingCoords == null) && (!getSetting(1).asToggle().state)){
             BleachLogger.errorMessage("Not looking at a bed");
             setEnabled(false);
             return;
@@ -88,12 +87,15 @@ public class AutoBedtrap extends Module {
         assert lookingCoords != null;
         assert mc.world != null;
         assert mc.world.getBlockState(lookingCoords).getBlock().getName().toString() != null;
+        if ((!getSetting(1).asToggle().state) && ((lookingCoords == null) || (!bed))) {
+            setEnabled(false);
+            return;
+        }
         try {
             if (!working) {
                 bed = mc.world.getBlockState(lookingCoords).getBlock().getName().toString().toUpperCase().contains("_BED");
             }
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return;
         }
         if (bed || working) {
@@ -123,11 +125,8 @@ public class AutoBedtrap extends Module {
                 return;
             }
 
-                placeTickAround(obby, bed1);
-                placeTickAround(obby, bed2);
-        }
-        else if (!getSetting(1).asToggle().state){
-            setEnabled(false);
+            placeTickAround(obby, bed1);
+            placeTickAround(obby, bed2);
         }
     }
 
@@ -158,17 +157,16 @@ public class AutoBedtrap extends Module {
             }
 
 
-                if (WorldUtils.canPlaceBlock(b)) {
-                    WorldUtils.placeBlock(b, obsidian, getSetting(2).asRotate(), false, true);
-                    cap++;
+            if (WorldUtils.canPlaceBlock(b)) {
+                WorldUtils.placeBlock(b, obsidian, getSetting(2).asRotate(), false, true);
+                cap++;
 
-                    if (cap >= getSetting(0).asSlider().getValueInt()) {
-                        return;
-                    }
+                if (cap >= getSetting(0).asSlider().getValueInt()) {
+                    return;
                 }
+            }
         }
         working = false;
         cap = 0;
     }
 }
-

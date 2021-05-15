@@ -1,6 +1,5 @@
 {
   "modules": [
-    "AutoEat",
     "Ambience",
     "AntiChunkBan",
     "AntiHunger",
@@ -10,6 +9,7 @@
     "AutoBedrockBreak",
     "AutoBedtrap",
     "AutoBuild",
+    "AutoEat",
     "AutoIStackDupe",
     "AutoLog",
     "AutoParkour",
