@@ -405,40 +405,12 @@ public class AutoBedrockBreak extends Module {
 
     @Subscribe
     public void onRender(EventWorldRender event) {
-
         if (!active) return;
         if (lookingCoords == null) return;
-
-
-        GL11.glPushMatrix();
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(3042);
-        GL11.glDisable(3553);
-        GL11.glDisable(2929);
-        GL11.glDepthMask(false);
-        GL11.glLineWidth(2.0F);
-
-        float blue = (float) (System.currentTimeMillis() / 10L % 512L) / 255.0F;
-        float red = (float) (System.currentTimeMillis() / 16L % 512L) / 255.0F;
-
-        if (blue > 1.0F) {
-            blue = 1.0F - blue;
-        }
-
-        if (red > 1.0F) {
-            red = 1.0F - red;
-        }
-
-        this.drawFilledBlockBox(lookingCoords, red, 0.7F, blue, 0.25F);
-
-        GL11.glEnable(2929);
-        GL11.glEnable(3553);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glPopMatrix();
+        this.drawFilledBlockBox(lookingCoords);
     }
 
-    public void drawFilledBlockBox(BlockPos blockPos, float r, float g, float b, float a) {
+    public void drawFilledBlockBox(BlockPos blockPos) {
         float[] rgb = getSetting(6).asColor().getRGBFloat();
         BlockState state = mc.world.getBlockState(blockPos);
         VoxelShape voxelShape = state.getOutlineShape(mc.world, blockPos);
