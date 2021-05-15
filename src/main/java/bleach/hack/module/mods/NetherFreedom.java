@@ -35,6 +35,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
+/**
+ * @author CUPZYY | https://github.com/CUPZYY
+ */
+
+
 public class NetherFreedom extends Module {
 
 

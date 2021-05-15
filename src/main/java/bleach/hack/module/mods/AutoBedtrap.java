@@ -17,6 +17,10 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
+/**
+ * @author CUPZYY | https://github.com/CUPZYY
+ */
+
 
 public class AutoBedtrap extends Module {
     BlockPos lookingCoords;
