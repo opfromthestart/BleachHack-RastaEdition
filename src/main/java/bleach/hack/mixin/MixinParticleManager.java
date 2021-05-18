@@ -62,7 +62,10 @@ public class MixinParticleManager {
 		if (ModuleManager.getModule("Nuker").isEnabled() && ModuleManager.getModule("Nuker").getSetting(8).asToggle().state) {
 			ci.cancel();
 		}
-		if (ModuleManager.getModule("NetherFreedom").isEnabled() && ModuleManager.getModule("NetherFreedom").getSetting(8).asToggle().state) {
+		else if (ModuleManager.getModule("NetherFreedom").isEnabled() && ModuleManager.getModule("NetherFreedom").getSetting(8).asToggle().state) {
+			ci.cancel();
+		}
+		else if (ModuleManager.getModule("NoRender").isEnabled() && ModuleManager.getModule("NoRender").getSetting(1).asToggle().getChild(9).asToggle().state) {
 			ci.cancel();
 		}
 	}

@@ -59,7 +59,8 @@ public class NoRender extends Module {
 								new SettingSlider("Keep", 0, 100, 0, 0).withDesc("How much of the explosion particles to keep")),
 						new SettingToggle("Armor Stands", false).withDesc("Disables rendering of armor stands"), // 1-6
 						new SettingToggle("Falling Blocks", false).withDesc("Disables rendering of falling blocks"), // 1-7
-						new SettingToggle("Campfire", false).withDesc("Disables rendering of campfire smoke particles"))); // 1-8
+						new SettingToggle("Campfire", false).withDesc("Disables rendering of campfire smoke particles"), // 1-8
+						new SettingToggle("Breaking particles", false).withDesc("Disables rendering of particles when breaking blocks"))); // 1-9
 
 		JsonElement signText = BleachFileHelper.readMiscSetting("customSignText");
 
