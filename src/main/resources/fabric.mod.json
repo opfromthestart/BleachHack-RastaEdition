@@ -4,10 +4,10 @@
   "version": "${version}",
 
   "name": "BleachHack CupEdition",
-  "description": "gamer hack",
+  "description": "Minecraft utility mod",
   "authors": [
-    "BleachDrinker420",
-    "CUPZYY"
+    "CUPZYY",
+    "BleachDrinker420"
   ],
   "contact": {
     "homepage": "https://github.com/CUPZYY/",
