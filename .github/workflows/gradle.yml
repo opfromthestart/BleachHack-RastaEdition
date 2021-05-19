@@ -23,5 +23,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: BH-CupEdition
-        path: build/libs/bleachhack_cupedition-1.16.5.jar
+        path: build/libs/bleachhack-cupedition-1.2.2-DEV.jar
         
