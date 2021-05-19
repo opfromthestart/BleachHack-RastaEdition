@@ -16,6 +16,7 @@ import bleach.hack.setting.other.SettingLists;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.PickaxeItem;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
@@ -142,13 +143,8 @@ public class NetherFreedom extends Module {
 
             
             Item mainhandItem = mc.player.getMainHandStack().getItem();
-            
-            if(!(mainhandItem == Items.NETHERITE_PICKAXE ||
-                    mainhandItem == Items.DIAMOND_PICKAXE ||
-                    mainhandItem == Items.IRON_PICKAXE ||
-                    mainhandItem == Items.STONE_PICKAXE ||
-                    mainhandItem == Items.WOODEN_PICKAXE ||
-                    mainhandItem == Items.GOLDEN_PICKAXE) && getSetting(9).asToggle().state){
+
+            if(!(mainhandItem instanceof PickaxeItem) && getSetting(9).asToggle().state){
                 return;
             }
             mc.interactionManager.updateBlockBreakingProgress(pos.getKey(), pos.getValue().getRight());
