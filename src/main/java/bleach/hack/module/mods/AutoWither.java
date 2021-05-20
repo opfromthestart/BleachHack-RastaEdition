@@ -235,7 +235,7 @@ public class AutoWither extends Module {
 
 
             if (WorldUtils.canPlaceBlock(b)) {
-                WorldUtils.placeBlock(b, item, getSetting(6).asRotate(), false, true);
+                WorldUtils.placeBlock(b, item, getSetting(6).asRotate(), false, false, true);
                 cap++;
 
                 if (cap >= getSetting(1).asSlider().getValueInt()) {
@@ -261,7 +261,7 @@ public class AutoWither extends Module {
 
 
             if (WorldUtils.canPlaceBlock(b)) {
-                WorldUtils.placeBlock(b, item, getSetting(6).asRotate(), false, true);
+                WorldUtils.placeBlock(b, item, getSetting(6).asRotate(), false, false, true);
                 cap++;
 
                 if (cap >= getSetting(1).asSlider().getValueInt()) {

@@ -162,7 +162,7 @@ public class AutoBedtrap extends Module {
 
 
             if (WorldUtils.canPlaceBlock(b)) {
-                WorldUtils.placeBlock(b, obsidian, getSetting(2).asRotate(), false, true);
+                WorldUtils.placeBlock(b, obsidian, getSetting(2).asRotate(), false, false, true);
                 cap++;
 
                 if (cap >= getSetting(0).asSlider().getValueInt()) {
