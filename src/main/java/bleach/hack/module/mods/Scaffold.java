@@ -148,10 +148,12 @@ public class Scaffold extends Module {
 			if (getSetting(9).asToggle().state && mc.world.getBlockState(mc.player.getBlockPos().down()).getMaterial().isReplaceable()) {
 				return;
 			}
-			boolean placed = WorldUtils.placeBlock(bp, slot, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(10).asToggle().state);
-			if (!placed && getSetting(7).asToggle().state) {
-				placed = WorldUtils.airPlaceBlock(bp, slot, getSetting(3).asRotate(), getSetting(4).asToggle().state, !getSetting(10).asToggle().state);
-			}
+			boolean placed = WorldUtils.placeBlock(
+					bp, slot,
+					getSetting(3).asRotate(),
+					getSetting(4).asToggle().state,
+					getSetting(7).asToggle().state,
+					!getSetting(9).asToggle().state);
 
 			if (placed) {
 				mc.player.inventory.selectedSlot = prevSlot;
