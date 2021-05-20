@@ -1,5 +1,6 @@
 {
   "modules": [
+    "Airplace",
     "Ambience",
     "AntiChunkBan",
     "AntiHunger",
@@ -71,7 +72,6 @@
     "OffhandCrash",
     "PacketFly",
     "Peek",
-    "PlaceInAir",
     "PlayerCrash",
     "PortalESP",
     "RotationSnap",
