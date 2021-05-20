@@ -54,84 +54,85 @@ public abstract class ClickGuiWindow extends Window {
 		int rgb = ModuleManager.getModule("ClickGUI").getSetting(5).asColor().getRGB();
 		int colorFF = 0xff000000 | rgb;
 		int color26 = 0x26000000 | rgb;
-
+		int rainbowFF = UI.getRainbowFromSettings(0);
+		int rainbow26 = (UI.getRainbowFromSettings(0) & 0x00FFFFFF) | 0x26000000;;
 
 
 		switch (ModuleManager.getModule("ClickGui").getSetting(6).asMode().mode) {
 			case 0:
 				if (round) {
-					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : rainbowFF);
 				}
 				// Line below category title
-				DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, !hiding ? y1 + 13 : y1 + 12, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, !hiding ? y1 + 13 : y1 + 12, !rainbow ? colorFF : rainbowFF);
 				// Fullfill | DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y1 + 1, 0xff55FF55);
 				// lines on the sides
-				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : rainbowFF);
 				if (round) {
-					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : rainbowFF);
 				}
 				// Bottom line
-				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : rainbowFF);
 				break;
 			case 1:
 				if (round) {
-					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : rainbowFF);
 				}
 				// Line below category title
-				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, !hiding ? y1 + 13 : y1 + 12, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, !hiding ? y1 + 13 : y1 + 12, !rainbow ? colorFF : rainbowFF);
 				// DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y1 + 1, 0xff55FF55);
-				DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, !rainbow ? color26 : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y2 - 1, !rainbow ? color26 : rainbow26);
 				// lines on the sides
-				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : rainbowFF);
 				if (round) {
-					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : rainbowFF);
 				}
-				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : rainbowFF);
 				break;
 			case 2:
 				if (round) {
-					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : rainbowFF);
 				}
 				// Line below category title
 				// Fullfill | DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y1 + 1, 0xff55FF55);
 				// lines on the sides
-				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : rainbowFF);
 				if (round) {
-					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : rainbowFF);
 				}
 				// Bottom line
-				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : rainbowFF);
 				break;
 			case 3:
 				if (round) {
-					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1 + 1, x1 + 1, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x1, y1, x1 + 1, y2, !rainbow ? colorFF : rainbowFF);
 				}
 				// Line below category title
 				// DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, !hiding ? y1 + 13 : y1 + 12, 0xff55FF55);
 				// DrawableHelper.fill(matrix, x1 + 1, y1 + 12, x2 - 1, y1 + 1, 0xff55FF55);
-				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y2 - 1, !rainbow ? color26 : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y2 - 1, !rainbow ? color26 : rainbow26);
 				// lines on the sides
-				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y1, x2 - 1, y1 + 1, !rainbow ? colorFF : rainbowFF);
 				if (round) {
-					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1 + 1, x2, y2 - 1, !rainbow ? colorFF : rainbowFF);
 				} else {
-					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+					DrawableHelper.fill(matrix, x2 - 1, y1, x2, y2, !rainbow ? colorFF : rainbowFF);
 				}
-				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : UI.getRainbowFromSettings(0));
+				DrawableHelper.fill(matrix, x1 + 1, y2 - 1, x2 - 1, y2, !rainbow ? colorFF : rainbowFF);
 				break;
 		}
 		/* +/- text */
