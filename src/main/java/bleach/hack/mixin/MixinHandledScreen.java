@@ -9,6 +9,7 @@
 package bleach.hack.mixin;
 
 import java.util.Arrays;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +27,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
-import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -63,19 +63,6 @@ public abstract class MixinHandledScreen extends Screen {
 
 					((MountBypass) ModuleManager.getModule("MountBypass")).dontCancel = false;
 				}));
-
-				addButton(new ButtonWidget(rightside, topside + 66, 50, 14, new LiteralText("Dupe"), button -> {
-					double start = client.player.getY();
-					for (int i = 0; i < 1000; i++) {
-						entity.setPos(client.player.getX(), start + i / 5d, client.player.getZ());
-						client.player.networkHandler.sendPacket(new VehicleMoveC2SPacket(entity));
-						//client.player.getVehicle().setPos(
-						//		client.player.getX() - 5, client.player.getY(), client.player.getZ() - 5);
-						//client.player.networkHandler.sendPacket(new VehicleMoveC2SPacket(e));
-					}
-
-					//client.player.networkHandler.onDisconnected(new LiteralText("aaaaaaaaaaaaaaaaaaaaa"));
-				}));
 			}
 		}
 	}
@@ -84,7 +71,6 @@ public abstract class MixinHandledScreen extends Screen {
 	public void render(MatrixStack matrix, int mouseX, int mouseY, float delta, CallbackInfo info) {
 		EventDrawContainer event = new EventDrawContainer(
 				(HandledScreen<?>) client.currentScreen, mouseX, mouseY, matrix); // hmm // hmm?
-
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();
@@ -93,22 +79,12 @@ public abstract class MixinHandledScreen extends Screen {
 		int topside = (height - backgroundHeight) / 2;
 		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
 			textRenderer.drawWithShadow(matrix, "IS Dupe: \u00a79[?]", rightside, topside + 2, -1);
-			textRenderer.drawWithShadow(matrix, "ec.me Dupe: \u00a79[?]", rightside, topside + 56, -1);
 
 			if (mouseX >= rightside + textRenderer.getWidth("IS Dupe: ") && mouseX <= rightside + textRenderer.getWidth("IS Dupe: ") + 15
 					&& mouseY >= topside + 1 && mouseY <= topside + 11) {
 				renderTooltip(matrix, Arrays.asList(
 						new LiteralText("\u00a79IllegalStack dupe/Old endcrystal.me dupe"),
 						new LiteralText("\u00a79Only works on servers running IllegalStack <= 2.1.0")),
-						mouseX, mouseY);
-			}
-
-			if (mouseX >= rightside + textRenderer.getWidth("ec.me Dupe: ") && mouseX <= rightside + textRenderer.getWidth("ec.me Dupe: ") + 15
-					&& mouseY >= topside + 55 && mouseY <= topside + 65) {
-				renderTooltip(matrix, Arrays.asList(
-						new LiteralText("\u00a79Endcrystal.me dupe"),
-						new LiteralText("\u00a79Endcrystal donkey dc dupe that was active for 2 days, patched 23/02/21"),
-						new LiteralText("\u00a79there has to be no blocks above you up to world height for it to work")),
 						mouseX, mouseY);
 			}
 		}
