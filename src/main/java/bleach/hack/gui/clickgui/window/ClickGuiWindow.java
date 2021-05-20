@@ -10,11 +10,7 @@ package bleach.hack.gui.clickgui.window;
 
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.UI;
-import bleach.hack.setting.base.SettingColor;
-import bleach.hack.util.render.color.ColorConverters;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.commons.lang3.tuple.Triple;
-import bleach.hack.util.render.color.ColorConverters;
 
 import bleach.hack.gui.window.Window;
 import net.minecraft.client.MinecraftClient;
