@@ -8,6 +8,9 @@
  */
 package bleach.hack.module.mods;
 
+import bleach.hack.event.events.EventTick;
+import bleach.hack.setting.base.SettingColor;
+import bleach.hack.setting.base.SettingMode;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
@@ -23,9 +26,13 @@ public class ClickGui extends Module {
 
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
-				new SettingSlider("Length", 70, 85, 77, 0).withDesc("The length of each window"),
+				new SettingSlider("Length", 70, 85, 85, 0).withDesc("The length of each window"),
 				new SettingToggle("Search bar", true).withDesc("Shows a search bar"),
-				new SettingToggle("Help", true).withDesc("Shows the help text"));
+				new SettingToggle("Help", true).withDesc("Shows the help text"),
+				new SettingToggle("Round", true).withDesc("Rounded corners"),
+				new SettingToggle("Rainbow", false).withDesc("Rainbow gui"),
+				new SettingColor("Color", 0.333f, 1f, 0.333f, false),
+				new SettingMode("Theme", "Wire", "SalHackSkid", "Clear", "Full"));
 	}
 
 	@Override
