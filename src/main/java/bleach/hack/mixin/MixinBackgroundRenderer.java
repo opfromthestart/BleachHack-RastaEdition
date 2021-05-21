@@ -8,8 +8,10 @@
  */
 package bleach.hack.mixin;
 
+import net.minecraft.client.render.Camera;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import bleach.hack.module.ModuleManager;
@@ -18,9 +20,14 @@ import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BackgroundRenderer.class)
 public class MixinBackgroundRenderer {
+	@Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
+	private static void applyFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo callbackInfo) {
+		if (ModuleManager.getModule("NoRender").isEnabled() && ModuleManager.getModule("NoRender").getSetting(0).asToggle().getChild(7).asToggle().state) callbackInfo.cancel();
+	}
 
 	@Redirect(method = {
 			"render(Lnet/minecraft/client/render/Camera;FLnet/minecraft/client/world/ClientWorld;IF)V",
