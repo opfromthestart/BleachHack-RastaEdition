@@ -12,11 +12,13 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import bleach.hack.command.Command;
+import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.clickgui.window.ModuleWindow;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
+import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.file.BleachFileHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -107,7 +109,29 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		
 		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
 			textRenderer.drawWithShadow(matrix, "Current command prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x16b1db);
-			textRenderer.drawWithShadow(matrix, "Use \"" + Command.PREFIX + "clickgui reset\" to reset the clickgui", 2, height - 10, 0x9703ab);
+			textRenderer.drawWithShadow(matrix, "Use \"" + Command.PREFIX + "clickgui reset\" or press the  to reset the clickgui", 2, height - 10, 0x9703ab);
 		}
+	}
+	public static void resetGUI(){
+		int x = 10;
+
+		for (Window m : ClickGui.clickGui.getWindows()) {
+			if (m instanceof ClickGuiWindow) {
+				((ClickGuiWindow) m).hiding = false;
+				m.x1 = x;
+				m.y1 = 35;
+				x += (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue() + 5;
+			}
+		}
+		ModuleManager.getModule("ClickGUI").getSetting(0).asSlider().setValue(85);
+		ModuleManager.getModule("ClickGUI").getSetting(1).asToggle().state = true;
+		ModuleManager.getModule("ClickGUI").getSetting(2).asToggle().state = true;
+		ModuleManager.getModule("ClickGUI").getSetting(3).asToggle().state = true;
+		ModuleManager.getModule("ClickGUI").getSetting(4).asToggle().state = false;
+		ModuleManager.getModule("ClickGUI").getSetting(4).asToggle().getChild(0).asSlider().setValue(15);
+		ModuleManager.getModule("ClickGUI").getSetting(5).asColor().hue = 0.333f;
+		ModuleManager.getModule("ClickGUI").getSetting(5).asColor().bri = 1f;
+		ModuleManager.getModule("ClickGUI").getSetting(5).asColor().sat = 0.666f;
+		ModuleManager.getModule("ClickGUI").getSetting(6).asMode().mode = 0;
 	}
 }

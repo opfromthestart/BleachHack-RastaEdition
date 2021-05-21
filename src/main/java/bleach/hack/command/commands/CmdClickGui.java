@@ -8,6 +8,7 @@
  */
 package bleach.hack.command.commands;
 
+import bleach.hack.gui.clickgui.ModuleClickGuiScreen;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import bleach.hack.command.Command;
@@ -19,6 +20,7 @@ import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.file.BleachFileHelper;
+import bleach.hack.module.mods.ClickGui;
 
 public class CmdClickGui extends Command {
 
@@ -34,16 +36,7 @@ public class CmdClickGui extends Command {
 
 		if (args[0].equalsIgnoreCase("reset")) {
 			if (args.length == 1 || args[1].equalsIgnoreCase("open")) {
-				int x = 10;
-
-				for (Window m : ClickGui.clickGui.getWindows()) {
-					if (m instanceof ClickGuiWindow) {
-						((ClickGuiWindow) m).hiding = false;
-						m.x1 = x;
-						m.y1 = 35;
-						x += (int) ModuleManager.getModule("ClickGui").getSetting(0).asSlider().getValue() + 5;
-					}
-				}
+				ModuleClickGuiScreen.resetGUI();
 			} else if (args[1].equalsIgnoreCase("closed")) {
 				int y = 50;
 

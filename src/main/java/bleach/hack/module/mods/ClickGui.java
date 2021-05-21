@@ -8,9 +8,14 @@
  */
 package bleach.hack.module.mods;
 
+import baritone.api.event.events.TickEvent;
 import bleach.hack.event.events.EventTick;
+import bleach.hack.gui.clickgui.window.ClickGuiWindow;
+import bleach.hack.gui.window.Window;
+import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
 import bleach.hack.gui.clickgui.ClickGuiScreen;
@@ -34,7 +39,8 @@ public class ClickGui extends Module {
 						new SettingSlider("Speed", 1, 30, 15, 0).withDesc("How fast the colors are changing")
 				),
 				new SettingColor("Color", 0.333f, 1f, 0.333f, false),
-				new SettingMode("Theme", "Wire", "SalHackSkid", "Clear", "Full"));
+				new SettingMode("Theme", "Wire", "SalHackSkid", "Clear", "Full"),
+				new SettingToggle("Reset", false).withDesc("Resets the gui"));
 	}
 
 	@Override
@@ -43,6 +49,15 @@ public class ClickGui extends Module {
 
 		mc.openScreen(clickGui);
 	}
+
+	@Subscribe
+	public void onTick(EventTick event) {
+		if (getSetting(7).asToggle().state){
+			ModuleClickGuiScreen.resetGUI();
+			getSetting(7).asToggle().state = false;
+		}
+	}
+
 
 	@Override
 	public void onDisable() {
