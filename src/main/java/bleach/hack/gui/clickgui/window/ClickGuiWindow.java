@@ -51,11 +51,12 @@ public abstract class ClickGuiWindow extends Window {
 		// Upper line
 		boolean round = ModuleManager.getModule("ClickGUI").getSetting(3).asToggle().state;
 		boolean rainbow = ModuleManager.getModule("ClickGUI").getSetting(4).asToggle().state;
+		int rainbowSpeed = ModuleManager.getModule("ClickGUI").getSetting(4).asToggle().getChild(0).asSlider().getValueInt();
 		int rgb = ModuleManager.getModule("ClickGUI").getSetting(5).asColor().getRGB();
 		int colorFF = 0xff000000 | rgb;
 		int color26 = 0x26000000 | rgb;
-		int rainbowFF = UI.getRainbowFromSettings(0);
-		int rainbow26 = (UI.getRainbowFromSettings(0) & 0x00FFFFFF) | 0x26000000;;
+		int rainbowFF = UI.getRainbow(0.5f, 1, 100 / rainbowSpeed, 0);
+		int rainbow26 = (UI.getRainbow(0.5f, 1, 100 / rainbowSpeed, 0) & 0x00FFFFFF) | 0x26000000;
 
 
 		switch (ModuleManager.getModule("ClickGui").getSetting(6).asMode().mode) {
