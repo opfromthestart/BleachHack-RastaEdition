@@ -2,6 +2,7 @@ package bleach.hack.module.mods;
 
 import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventReadPacket;
+import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
@@ -16,6 +17,7 @@ import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -50,11 +52,11 @@ public class AutoEZ extends Module {
                 for (PlayerEntity e : mc.world.getPlayers()) {
                     if (e == mc.player)
                         continue;
-
-                    if (0.0f == mc.player.getHealth()) return;
+                    List<String> list = new ArrayList<String>(Arrays.asList(msg.split(" ")));
+                    int index = list.indexOf("by");
 
                     if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().getString())
-                            && !msg.contains("<" + e.getName().getString() + ">") && !msg.contains("<" + mc.player.getName().getString() + ">")) {
+                            && !msg.contains("<" + e.getName().getString() + ">") && !msg.contains("<" + mc.player.getName().getString() + ">") && (list.get(index + 1).equals(mc.player.getName().getString()))) {
                         if (getSetting(0).asMode().mode == 1) {
                             mc.player.sendChatMessage(e.getName().getString() + " Just got EZed with the muscles of BleachHack CupEdition");
                         } else if (getSetting(0).asMode().mode == 3) {
