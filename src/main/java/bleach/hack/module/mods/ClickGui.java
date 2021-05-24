@@ -36,7 +36,7 @@ public class ClickGui extends Module {
 				new SettingToggle("Help", true).withDesc("Shows the help text"),
 				new SettingToggle("Round", true).withDesc("Rounded corners"),
 				new SettingToggle("Rainbow", false).withDesc("Rainbow gui").withChildren(
-						new SettingSlider("Speed", 1, 30, 15, 0).withDesc("How fast the colors are changing")
+						new SettingSlider("Speed", 1, 50, 15, 0).withDesc("How fast the colors are changing")
 				),
 				new SettingColor("Color", 0.333f, 1f, 0.333f, false),
 				new SettingMode("Theme", "Wire", "SalHackSkid", "Clear", "Full"),
