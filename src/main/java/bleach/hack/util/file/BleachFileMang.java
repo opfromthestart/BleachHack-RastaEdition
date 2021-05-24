@@ -8,6 +8,7 @@
  */
 package bleach.hack.util.file;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import bleach.hack.BleachHack;
 import net.minecraft.client.MinecraftClient;
+import org.apache.commons.io.FileUtils;
 
 public class BleachFileMang {
 
@@ -105,7 +107,13 @@ public class BleachFileMang {
 	/** Deletes a file if it exists. **/
 	public static void deleteFile(String... file) {
 		try {
-			Files.deleteIfExists(stringsToPath(file));
+			File filebruh = new File(String.valueOf(stringsToPath(file).toFile()));
+			if (Files.isDirectory(filebruh.toPath())){
+				FileUtils.deleteDirectory(filebruh);
+			}
+			else{
+				Files.deleteIfExists(stringsToPath(file));
+			}
 		} catch (Exception e) {
 			BleachHack.logger.error("Error Deleting File: " + Arrays.toString(file));
 			e.printStackTrace();

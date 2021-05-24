@@ -30,7 +30,6 @@ public class BleachHack implements ModInitializer {
 	public static Logger logger;
 
 	public static final String VERSION = "1.2.2-DEV";
-	public static final int INTVERSION = 29;
 
 	public static final EventBus eventBus = new EventBus();
 
@@ -72,6 +71,7 @@ public class BleachHack implements ModInitializer {
 
 		CommandManager.readPrefix();
 		CommandSuggestor.init();
+		BleachFileMang.deleteFile("temp");
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
 		if (mainMenu != null && !mainMenu.getAsBoolean()) {

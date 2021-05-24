@@ -16,6 +16,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 
+import bleach.hack.util.VersionCompare;
+import bleach.hack.util.file.CupGithubReader;
+import net.fabricmc.loader.api.Version;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -127,7 +130,8 @@ public class BleachTitleScreen extends WindowScreen {
 							return;
 						}
 
-						File modpath = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack").get()).getOriginUrl().toURI());
+						File modpath = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack-cupedition").get()).getOriginUrl().toURI());
+						System.out.println(modpath);
 
 						if (!modpath.isFile()) {
 							updaterText = "Invalid mod path";
@@ -156,12 +160,7 @@ public class BleachTitleScreen extends WindowScreen {
 							FileUtils.copyURLToFile(new URL(link), installerPath.toFile());
 						}
 
-						Runtime.getRuntime().exec("cmd /c start "
-								+ BleachFileMang.stringsToPath("temp", name).toAbsolutePath().toString()
-								+ " "
-								+ modpath.toString()
-								+ " "
-								+ version.get("installer").getAsJsonObject().get("url").getAsString());
+						Runtime.getRuntime().exec("\"" + installerPath + "\" \"" + modpath + "\" \"" + version.get("installer").getAsJsonObject().get("url").getAsString() + "\"");
 
 						client.scheduleStop();
 					} catch (Exception e) {
@@ -172,19 +171,18 @@ public class BleachTitleScreen extends WindowScreen {
 
 		getWindow(1).buttons.add(
 				new WindowButton(105, 115, 195, 135, "Github", () -> {
-					Util.getOperatingSystem().open(URI.create("https://github.com/BleachDrinker420/BleachHack/"));
-					Util.getOperatingSystem().open(URI.create("https://github.com/CUPZYY/BleachHack-CupEdition/"));
+					Util.getOperatingSystem().open(URI.create("https://github.com/CUPZYY/BleachHack-CupEdition/releases"));
 				}));
 
 		if (version == null) {
-			version = BleachGithubReader.readJson("update", SharedConstants.getGameVersion().getName() + ".json");
+			version = CupGithubReader.readJson("autoupdate", SharedConstants.getGameVersion().getName() + ".json");
 
 			if (version == null) {
 				version = new JsonObject();
 			}
 		}
 
-		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
+		if (VersionCompare.compareVersions(version.get("version").getAsString(), BleachHack.VERSION.replaceAll("-DEV", "")) == 1) {
 			getWindow(1).closed = false;
 			selectWindow(1);
 		}
@@ -243,14 +241,14 @@ public class BleachTitleScreen extends WindowScreen {
 
 			matrix.scale(1f / 3f, 1f / 3f, 0f);
 
-			if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
+			if (version != null && version.has("version") && VersionCompare.compareVersions(version.get("version").getAsString(), BleachHack.VERSION.replaceAll("-DEV", "")) == 1) {
 				drawStringWithShadow(matrix, textRenderer, "\u00a76[ \u00a7nUpdate\u00a76 ]", getWindow(0).x1 + 3, getWindow(0).y2 - 12, -1);
 			}
 		} else if (window == 1) {
 			int x = getWindow(1).x1;
 			int y = getWindow(1).y1;
 
-			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BleachHack-CupEdition version!", x + 100, y + 15, -1);
+			drawCenteredString(matrix, this.textRenderer, "\u00a7cOutdated BH-CupEdition version!", x + 100, y + 15, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7eClick update to auto-update", x + 100, y + 28, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7eOr Github to manually update", x + 100, y + 38, -1);
 			drawCenteredString(matrix, this.textRenderer, "\u00a7c\u00a7o" + updaterText, x + 100, y + 58, -1);
@@ -258,7 +256,7 @@ public class BleachTitleScreen extends WindowScreen {
 	}
 
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (version != null && version.has("version") && version.get("version").getAsInt() > BleachHack.INTVERSION) {
+		if (version != null && version.has("version") && VersionCompare.compareVersions(version.get("version").getAsString(), BleachHack.VERSION.replaceAll("-DEV", "")) == 1) {
 			int x = getWindow(0).x1;
 			int y = getWindow(0).y2;
 			if (mouseX >= x + 1 && mouseX <= x + 70 && mouseY >= y - 12 && mouseY <= y) {
