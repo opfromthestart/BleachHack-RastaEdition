@@ -37,6 +37,7 @@
     "MixinLlamaPigStriderEntity",
     "MixinMapRenderer",
     "MixinMinecraftClient",
+    "MixinPacketByteBuf",
     "MixinPacketInflater",
     "MixinParticleManager",
     "MixinPlayerEntity",
