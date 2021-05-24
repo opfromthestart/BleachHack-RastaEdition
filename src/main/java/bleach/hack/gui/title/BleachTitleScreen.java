@@ -235,7 +235,7 @@ public class BleachTitleScreen extends WindowScreen {
 			}
 			int[] intarrayCup = {7, 13, 19, 25, 31, 37, 39, 43, 45, 51};
 			String[] bruhCup = {"C", "u", "p", "E", "d", "i", "t", "i", "o", "n"};
-			for (int i = 0; i < bruh.length; i++) {
+			for (int i = 0; i < bruhCup.length; i++) {
 				drawStringWithShadow(matrix, this.textRenderer, bruhCup[i], (x + w / 2 - 72) / 3 + intarrayCup[i] - 8, (y + h / 4 + 20) / 3, UI.getRainbowFromSettings(i * 270));
 			}
 
