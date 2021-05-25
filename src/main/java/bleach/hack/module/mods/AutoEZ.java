@@ -1,19 +1,12 @@
 package bleach.hack.module.mods;
 
-import bleach.hack.BleachHack;
 import bleach.hack.event.events.EventReadPacket;
-import bleach.hack.event.events.EventTick;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingMode;
-import bleach.hack.setting.base.SettingToggle;
-import bleach.hack.util.BleachLogger;
-import bleach.hack.util.file.BleachFileHelper;
 import bleach.hack.util.file.BleachFileMang;
 import com.google.common.eventbus.Subscribe;
-import com.google.gson.JsonElement;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 import java.util.ArrayList;
@@ -28,7 +21,7 @@ public class AutoEZ extends Module {
 
     public AutoEZ() {
         super("AutoEZ", KEY_UNBOUND, Category.MISC, "Sends a message when you kill someone (edit in autoez.txt)",
-                new SettingMode("Message", "None", "EZ", "Custom", "GG").withDesc("Send a chat message when you kill someone"),
+                new SettingMode("Message", "EZ", "Custom", "GG").withDesc("Send a chat message when you kill someone"),
                 new SettingMode("Read", "Random", "Order").withDesc("How to read the custom ezmessage"));
     }
 
@@ -52,16 +45,16 @@ public class AutoEZ extends Module {
                 for (PlayerEntity e : mc.world.getPlayers()) {
                     if (e == mc.player)
                         continue;
-                    List<String> list = new ArrayList<String>(Arrays.asList(msg.split(" ")));
+                    List<String> list = new ArrayList<>(Arrays.asList(msg.split(" ")));
                     int index = list.indexOf("by");
 
                     if (mc.player.distanceTo(e) < 12 && msg.contains(e.getName().getString())
                             && !msg.contains("<" + e.getName().getString() + ">") && !msg.contains("<" + mc.player.getName().getString() + ">") && (list.get(index + 1).equals(mc.player.getName().getString()))) {
-                        if (getSetting(0).asMode().mode == 1) {
+                        if (getSetting(0).asMode().mode == 0) {
                             mc.player.sendChatMessage(e.getName().getString() + " Just got EZed with the muscles of BleachHack CupEdition");
-                        } else if (getSetting(0).asMode().mode == 3) {
-                            mc.player.sendChatMessage("GG, " + e.getName().getString() + ", but BleachHack CupEdition is ontop!");
                         } else if (getSetting(0).asMode().mode == 2) {
+                            mc.player.sendChatMessage("GG, " + e.getName().getString() + ", but BleachHack CupEdition is ontop!");
+                        } else if (getSetting(0).asMode().mode == 1) {
                             if (getSetting(1).asMode().mode == 0) {
                                 mc.player.sendChatMessage(lines.get(rand.nextInt(lines.size())).replace("$p", e.getName().getString()));
                             } else if (getSetting(1).asMode().mode == 1) {
