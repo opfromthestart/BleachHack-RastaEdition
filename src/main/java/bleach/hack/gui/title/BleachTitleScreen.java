@@ -131,7 +131,6 @@ public class BleachTitleScreen extends WindowScreen {
 						}
 
 						File modpath = new File(((ModContainer) FabricLoader.getInstance().getModContainer("bleachhack-cupedition").get()).getOriginUrl().toURI());
-						System.out.println(modpath);
 
 						if (!modpath.isFile()) {
 							updaterText = "Invalid mod path";

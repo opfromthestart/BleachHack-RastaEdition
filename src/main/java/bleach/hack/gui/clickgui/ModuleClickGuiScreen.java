@@ -109,7 +109,7 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		
 		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
 			textRenderer.drawWithShadow(matrix, "Current command prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x16b1db);
-			textRenderer.drawWithShadow(matrix, "Use \"" + Command.PREFIX + "clickgui reset\" or press the  to reset the clickgui", 2, height - 10, 0x9703ab);
+			textRenderer.drawWithShadow(matrix, "Press \"reset\" in the clickgui module dropdown menu to reset the clickgui", 2, height - 10, 0x9703ab);
 		}
 	}
 	public static void resetGUI(){
