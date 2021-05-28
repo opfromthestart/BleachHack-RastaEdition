@@ -9,7 +9,14 @@
 package bleach.hack.mixin;
 
 import java.util.Arrays;
+import java.util.Collections;
 
+import bleach.hack.module.Module;
+import bleach.hack.util.BleachLogger;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.AnvilScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.screen.slot.SlotActionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,6 +50,7 @@ public abstract class MixinHandledScreen extends Screen {
 
 	@Inject(method = "init()V", at = @At("RETURN"))
 	protected void init(CallbackInfo info) {
+		MinecraftClient mc = MinecraftClient.getInstance();
 		if (client.player.getVehicle() instanceof HorseBaseEntity) {
 			int rightside = (width + backgroundWidth) / 2 + 2;
 			int topside = (height - backgroundHeight) / 2;
@@ -65,6 +73,33 @@ public abstract class MixinHandledScreen extends Screen {
 				}));
 			}
 		}
+		if(client.currentScreen instanceof AnvilScreen) {
+			int rightside = (width + backgroundWidth) / 2 + 2;
+			int topside = (height - backgroundHeight) / 2;
+			addButton(new ButtonWidget(rightside, topside + 12, 50, 14, new LiteralText("\uff41\uff42\uff43\uff44"), button -> {
+				ModuleManager.getModule("AnvilFont").getSetting(0).asMode().mode = 0;
+				ModuleManager.getModule("AnvilFont").setEnabled(true);
+			}));
+			addButton(new ButtonWidget(rightside, topside + 28, 50, 14, new LiteralText("\u1D00\u0299\u1d04\u1d05"), button -> {
+				ModuleManager.getModule("AnvilFont").getSetting(0).asMode().mode = 1;
+				ModuleManager.getModule("AnvilFont").setEnabled(true);
+			}));
+			addButton(new ButtonWidget(rightside, topside + 44, 50, 14, new LiteralText("\u24d0\u24d1\u24d2\u24d3"), button -> {
+				ModuleManager.getModule("AnvilFont").getSetting(0).asMode().mode = 2;
+				ModuleManager.getModule("AnvilFont").setEnabled(true);
+			}));
+			addButton(new ButtonWidget(rightside, topside + 60, 50, 14, new LiteralText("\u039bb\u1455d"), button -> {
+				ModuleManager.getModule("AnvilFont").getSetting(0).asMode().mode = 3;
+				ModuleManager.getModule("AnvilFont").setEnabled(true);
+			}));
+			addButton(new ButtonWidget(rightside, topside + 76, 50, 14, new LiteralText("\u03b1\u0432c\u2202"), button -> {
+				ModuleManager.getModule("AnvilFont").getSetting(0).asMode().mode = 4;
+				ModuleManager.getModule("AnvilFont").setEnabled(true);
+			}));
+			addButton(new ButtonWidget(rightside, topside + 92, 50, 14, new LiteralText("abcd"), button -> {
+				ModuleManager.getModule("AnvilFont").setEnabled(false);
+			}));
+		}
 	}
 
 	@Inject(method = "render", at = @At("RETURN"))
@@ -74,7 +109,6 @@ public abstract class MixinHandledScreen extends Screen {
 		BleachHack.eventBus.post(event);
 		if (event.isCancelled())
 			info.cancel();
-
 		int rightside = (width + backgroundWidth) / 2 + 2;
 		int topside = (height - backgroundHeight) / 2;
 		if (client.player.getVehicle() instanceof AbstractDonkeyEntity) {
@@ -86,6 +120,13 @@ public abstract class MixinHandledScreen extends Screen {
 						new LiteralText("\u00a79IllegalStack dupe/Old endcrystal.me dupe"),
 						new LiteralText("\u00a79Only works on servers running IllegalStack <= 2.1.0")),
 						mouseX, mouseY);
+			}
+		}
+		if (MinecraftClient.getInstance().currentScreen instanceof AnvilScreen){
+			if (mouseX >= rightside && mouseX <= rightside + 50
+					&& mouseY >= topside + 92 && mouseY <= topside + 106) {
+				renderTooltip(matrix, Collections.singletonList(
+						new LiteralText("\u00a79Use this after using custom fonts")), mouseX, mouseY);
 			}
 		}
 	}

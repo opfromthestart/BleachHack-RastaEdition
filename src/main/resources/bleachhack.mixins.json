@@ -5,12 +5,13 @@
   "mixins": [
   ],
   "client": [
+    "AccessorAnvilScreen",
     "AccessorChatScreen",
     "AccessorHeldItemRenderer",
     "AccessorMinecraftClient",
-    "MixinBackgroundRenderer",
     "MixinAbstractBlock",
     "MixinAbstractBlockState",
+    "MixinBackgroundRenderer",
     "MixinBeaconScreen",
     "MixinBiomeColors",
     "MixinBlock",
