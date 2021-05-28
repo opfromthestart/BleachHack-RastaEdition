@@ -97,7 +97,8 @@ public abstract class MixinHandledScreen extends Screen {
 				ModuleManager.getModule("AnvilFont").setEnabled(true);
 			}));
 			addButton(new ButtonWidget(rightside, topside + 92, 50, 14, new LiteralText("abcd"), button -> {
-				ModuleManager.getModule("AnvilFont").setEnabled(false);
+				ModuleManager.getModule("AnvilFont").getSetting(0).asMode().mode = 5;
+				ModuleManager.getModule("AnvilFont").setEnabled(true);
 			}));
 		}
 	}
