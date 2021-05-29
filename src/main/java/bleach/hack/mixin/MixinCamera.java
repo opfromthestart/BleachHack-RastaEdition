@@ -28,4 +28,10 @@ public class MixinCamera {
 			cir.setReturnValue(Fluids.EMPTY.getDefaultState());
 		}
 	}
+	@Inject(method = "clipToSpace", at = @At("HEAD"), cancellable = true)
+	private void onClipToSpace(double desiredCameraDistance, CallbackInfoReturnable<Double> info) {
+		if (ModuleManager.getModule("CameraClip").isEnabled()) {
+			info.setReturnValue(desiredCameraDistance);
+		}
+	}
 }
