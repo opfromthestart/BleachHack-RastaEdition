@@ -8,6 +8,9 @@
  */
 package bleach.hack.command.commands;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import bleach.hack.command.Command;
 import bleach.hack.command.CommandCategory;
 import bleach.hack.command.exception.CmdSyntaxException;
@@ -47,26 +50,22 @@ public class CmdNBT extends Command {
 
 			Text copy = new LiteralText("\u00a7e\u00a7l<COPY>")
 					.styled(s ->
-					s.withClickEvent(
-							new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, stringTag))
-					.withHoverEvent(
-							new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Copy the nbt of this item to your clipboard"))));
+							s.withClickEvent(
+									new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, stringTag))
+									.withHoverEvent(
+											new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LiteralText("Copy the nbt of this item to your clipboard"))));
 
 			BleachLogger.infoMessage(new LiteralText("\u00a76\u00a7lNBT: ").append(copy).append("\u00a76\n" + stringTag));
 		} else if (args[0].equalsIgnoreCase("copy")) {
 			mc.keyboard.setClipboard(item.getTag() + "");
-			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + (item.getTag() + "\n") + "\u00a76to clipboard.");
+			BleachLogger.infoMessage("\u00a76Copied\n\u00a7f" + item.getTag() + "\n\u00a76to clipboard.");
 		} else if (args[0].equalsIgnoreCase("set")) {
-			try {
-				if (args[1].isEmpty()) {
-					throw new CmdSyntaxException();
-				}
-
-				item.setTag(StringNbtReader.parse(args[1]));
-				BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName() + "to\n\u00a7f" + (item.getTag()));
-			} catch (Exception e) {
+			if (args.length < 2) {
 				throw new CmdSyntaxException();
 			}
+
+			item.setTag(StringNbtReader.parse(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), ' ')));
+			BleachLogger.infoMessage("\u00a76Set NBT of " + item.getItem().getName().getString() + " to\n" + BleachJsonHelper.formatJson(item.getTag().toString()));
 		} else if (args[0].equalsIgnoreCase("wipe")) {
 			item.setTag(new CompoundTag());
 		}
