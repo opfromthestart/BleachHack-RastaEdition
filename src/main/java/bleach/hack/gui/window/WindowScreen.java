@@ -37,9 +37,10 @@ public abstract class WindowScreen extends Screen {
 		super(title);
 	}
 
-	public void addWindow(Window window) {
+	public <T extends Window> T addWindow(T window) {
 		windows.add(window);
 		windowOrder.put(windows.size() - 1, windows.size() - 1);
+		return window;
 	}
 
 	public Window getWindow(int i) {
@@ -112,21 +113,13 @@ public abstract class WindowScreen extends Screen {
 	}
 
 	public void selectWindow(int window) {
-		for (Window w: windows) {
-			if (w.selected) {
-				w.inactiveTime = 2;
-			}
-
-			w.selected = false;
-		}
-
 		for (int i = 0; i < windows.size(); i++) {
 			Window w = windows.get(i);
 
 			if (i == window) {
 				w.selected = true;
 				int index = -1;
-				for (Entry<Integer, Integer> e: windowOrder.entrySet()) {
+				for (Entry<Integer, Integer> e : windowOrder.entrySet()) {
 					if (e.getValue() == window) {
 						index = e.getKey();
 						break;
@@ -134,7 +127,7 @@ public abstract class WindowScreen extends Screen {
 				}
 
 				windowOrder.remove(index);
-				for (Entry<Integer, Integer> e: new TreeMap<>(windowOrder).entrySet()) {
+				for (Entry<Integer, Integer> e : new TreeMap<>(windowOrder).entrySet()) {
 					if (e.getKey() > index) {
 						windowOrder.remove(e.getKey());
 						windowOrder.put(e.getKey() - 1, e.getValue());
@@ -142,6 +135,8 @@ public abstract class WindowScreen extends Screen {
 				}
 
 				windowOrder.put(windowOrder.size(), window);
+			} else {
+				w.selected = false;
 			}
 		}
 	}
@@ -151,7 +146,7 @@ public abstract class WindowScreen extends Screen {
 		for (int wi: getWindowsFrontToBack()) {
 			Window w = getWindow(wi);
 
-			if (w.inactiveTime <= 0 && mouseX > w.x1 && mouseX < w.x2 && mouseY > w.y1 && mouseY < w.y2 && !w.closed) {
+			if (mouseX > w.x1 && mouseX < w.x2 && mouseY > w.y1 && mouseY < w.y2 && !w.closed) {
 				if (w.shouldClose((int) mouseX, (int) mouseY)) {
 					w.closed = true;
 					break;

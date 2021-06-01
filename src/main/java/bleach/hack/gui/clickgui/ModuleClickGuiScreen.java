@@ -11,6 +11,8 @@ package bleach.hack.gui.clickgui;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import bleach.hack.BleachHack;
 import bleach.hack.command.Command;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
 import bleach.hack.gui.clickgui.window.ModuleWindow;
@@ -20,6 +22,7 @@ import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
 import bleach.hack.util.file.BleachFileHelper;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -106,6 +109,8 @@ public class ModuleClickGuiScreen extends ClickGuiScreen {
 		}
 
 		super.render(matrix, mouseX, mouseY, delta);
+
+		textRenderer.draw(matrix, "BleachHack-CupEdition-" + BleachHack.VERSION + "-" + SharedConstants.getGameVersion().getName(), 3, 3, 0x55FF55);
 		
 		if (ModuleManager.getModule("ClickGui").getSetting(2).asToggle().state) {
 			textRenderer.drawWithShadow(matrix, "Current command prefix is: \"" + Command.PREFIX + "\" (" + Command.PREFIX + "help)", 2, height - 20, 0x16b1db);

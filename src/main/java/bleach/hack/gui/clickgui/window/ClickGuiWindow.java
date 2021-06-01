@@ -142,8 +142,6 @@ public abstract class ClickGuiWindow extends Window {
 	}
 
 	public void render(MatrixStack matrix, int mouseX, int mouseY) {
-		y2 = hiding ? y1 + 13 : y1 + 13 + getHeight();
-
 		super.render(matrix, mouseX, mouseY);
 
 		if (rmDown && mouseOver(x1, y1, x1 + (x2 - x1), y1 + 13)) {
@@ -151,14 +149,14 @@ public abstract class ClickGuiWindow extends Window {
 			hiding = !hiding;
 		}
 	}
+	public Triple<Integer, Integer, String> getTooltip() {
+		return null;
+	}
 
 	public boolean mouseOver(int minX, int minY, int maxX, int maxY) {
 		return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY < maxY;
 	}
 
-	public Triple<Integer, Integer, String> getTooltip() {
-		return null;
-	}
 
 	public void updateKeys(int mouseX, int mouseY, int keyDown, boolean lmDown, boolean rmDown, boolean lmHeld, int mwScroll) {
 		this.mouseX = mouseX;
@@ -169,6 +167,4 @@ public abstract class ClickGuiWindow extends Window {
 		this.lmHeld = lmHeld;
 		this.mwScroll = mwScroll;
 	}
-
-	public abstract int getHeight();
 }

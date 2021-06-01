@@ -9,7 +9,10 @@
 package bleach.hack.util.file;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,10 +20,13 @@ import com.google.gson.JsonPrimitive;
 
 import bleach.hack.BleachHack;
 import bleach.hack.gui.clickgui.window.ClickGuiWindow;
+import bleach.hack.gui.clickgui.window.UIWindow;
+import bleach.hack.gui.clickgui.window.UIWindow.Position;
 import bleach.hack.gui.window.Window;
 import bleach.hack.module.Module;
 import bleach.hack.module.ModuleManager;
 import bleach.hack.module.mods.ClickGui;
+import bleach.hack.module.mods.UI;
 import bleach.hack.setting.base.SettingBase;
 import bleach.hack.util.BleachLogger;
 import bleach.hack.util.FriendManager;
@@ -30,6 +36,7 @@ public class BleachFileHelper {
 	public static boolean SCHEDULE_SAVE_MODULES = false;
 	public static boolean SCHEDULE_SAVE_FRIENDS = false;
 	public static boolean SCHEDULE_SAVE_CLICKGUI = false;
+	public static boolean SCHEDULE_SAVE_UI = false;
 
 	public static void saveModules() {
 		SCHEDULE_SAVE_MODULES = false;
@@ -143,7 +150,7 @@ public class BleachFileHelper {
 			JsonObject jw = new JsonObject();
 			jw.addProperty("x", w.x1);
 			jw.addProperty("y", w.y1);
-			
+
 			if (w instanceof ClickGuiWindow) {
 				jw.addProperty("hidden", ((ClickGuiWindow) w).hiding);
 			}
@@ -156,10 +163,10 @@ public class BleachFileHelper {
 
 	public static void readClickGui() {
 		JsonObject jo = BleachJsonHelper.readJsonFile("clickgui.json");
-		
+
 		if (jo == null)
 			return;
-		
+
 		for (Entry<String, JsonElement> e : jo.entrySet()) {
 			if (!e.getValue().isJsonObject())
 				continue;
@@ -167,11 +174,11 @@ public class BleachFileHelper {
 			for (Window w : ClickGui.clickGui.getWindows()) {
 				if (w.title.equals(e.getKey())) {
 					JsonObject jw = e.getValue().getAsJsonObject();
-					
+
 					try {
 						w.x1 = jw.get("x").getAsInt();
 						w.y1 = jw.get("y").getAsInt();
-						
+
 						if (w instanceof ClickGuiWindow && jw.has("hidden")) {
 							((ClickGuiWindow) w).hiding = jw.get("hidden").getAsBoolean();
 						}
@@ -180,6 +187,58 @@ public class BleachFileHelper {
 					}
 				}
 			}
+		}
+	}
+
+	public static void saveUI() {
+		SCHEDULE_SAVE_UI = false;
+
+		JsonObject jo = new JsonObject();
+
+		for (Entry<String, UIWindow> w : UI.uiScreen.uiWindows.entrySet()) {
+			JsonObject jw = new JsonObject();
+			jw.addProperty("x", w.getValue().position.xPercent);
+			jw.addProperty("y", w.getValue().position.yPercent);
+
+			JsonObject ja = new JsonObject();
+			for (Pair<String, Integer> atm: w.getValue().position.getAttachments()) {
+				ja.add(atm.getLeft(), new JsonPrimitive(atm.getRight()));
+			}
+
+			if (ja.size() > 0) {
+				jw.add("attachments", ja);
+			}
+
+			jo.add(w.getKey(), jw);
+		}
+
+		BleachJsonHelper.setJsonFile(jo, "ui.json");
+	}
+
+	public static void readUI() {
+		JsonObject jo = BleachJsonHelper.readJsonFile("ui.json");
+
+		if (jo == null)
+			return;
+
+		Map<String, UIWindow> uiWindows = UI.uiScreen.uiWindows;
+		for (Entry<String, JsonElement> e : jo.entrySet()) {
+			if (!e.getValue().isJsonObject() || !uiWindows.containsKey(e.getKey()))
+				continue;
+
+			JsonObject jw = e.getValue().getAsJsonObject();
+			if (!jw.has("x") || !jw.has("y"))
+				continue;
+
+			Position pos = new Position(jw.get("x").getAsDouble(), jw.get("y").getAsDouble());
+
+			if (jw.has("attachments")) {
+				for (Entry<String, JsonElement> ja : jw.get("attachments").getAsJsonObject().entrySet()) {
+					pos.addAttachment(Pair.of(ja.getKey(), ja.getValue().getAsInt()));
+				}
+			}
+
+			uiWindows.get(e.getKey()).position = pos;
 		}
 	}
 

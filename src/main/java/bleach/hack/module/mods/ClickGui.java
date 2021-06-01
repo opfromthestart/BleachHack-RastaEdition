@@ -8,17 +8,12 @@
  */
 package bleach.hack.module.mods;
 
-import baritone.api.event.events.TickEvent;
 import bleach.hack.event.events.EventTick;
-import bleach.hack.gui.clickgui.window.ClickGuiWindow;
-import bleach.hack.gui.window.Window;
-import bleach.hack.module.ModuleManager;
 import bleach.hack.setting.base.SettingColor;
 import bleach.hack.setting.base.SettingMode;
 import com.google.common.eventbus.Subscribe;
 import org.lwjgl.glfw.GLFW;
 
-import bleach.hack.gui.clickgui.ClickGuiScreen;
 import bleach.hack.gui.clickgui.ModuleClickGuiScreen;
 import bleach.hack.module.Category;
 import bleach.hack.module.Module;
@@ -27,7 +22,7 @@ import bleach.hack.setting.base.SettingToggle;
 
 public class ClickGui extends Module {
 
-	public static final ClickGuiScreen clickGui = new ModuleClickGuiScreen();
+	public static final ModuleClickGuiScreen clickGui = new ModuleClickGuiScreen();
 
 	public ClickGui() {
 		super("ClickGui", GLFW.GLFW_KEY_RIGHT_SHIFT, Category.RENDER, "Draws the clickgui",
