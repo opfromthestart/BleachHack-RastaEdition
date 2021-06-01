@@ -16,9 +16,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 
+import bleach.hack.gui.window.widget.WindowButtonWidget;
 import bleach.hack.util.VersionCompare;
 import bleach.hack.util.file.CupGithubReader;
-import net.fabricmc.loader.api.Version;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -29,7 +29,6 @@ import bleach.hack.BleachHack;
 import bleach.hack.gui.title.particle.ParticleManager;
 import bleach.hack.gui.window.WindowScreen;
 import bleach.hack.gui.window.Window;
-import bleach.hack.gui.window.WindowButton;
 import bleach.hack.module.mods.UI;
 import bleach.hack.util.file.BleachFileHelper;
 import bleach.hack.util.file.BleachFileMang;
@@ -38,7 +37,6 @@ import net.fabricmc.loader.ModContainer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.options.OptionsScreen;
@@ -46,7 +44,6 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.realms.gui.screen.RealmsBridgeScreen;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.TranslatableText;
@@ -80,32 +77,32 @@ public class BleachTitleScreen extends WindowScreen {
 		int h = getWindow(0).y2 - getWindow(0).y1;
 		int maxY = MathHelper.clamp(h / 4 + 119, 0, h - 22);
 
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
+		getWindow(0).addWidget(
+				new WindowButtonWidget(w / 2 - 100, h / 4 + 38, w / 2 + 100, h / 4 + 58, I18n.translate("menu.singleplayer"), () -> {
 					client.openScreen(new SelectWorldScreen(client.currentScreen));
 				}));
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
+		getWindow(0).addWidget(
+				new WindowButtonWidget(w / 2 - 100, h / 4 + 62, w / 2 + 100, h / 4 + 82, I18n.translate("menu.multiplayer"), () -> {
 					client.openScreen(new MultiplayerScreen(client.currentScreen));
 				}));
 
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 - 100, h / 4 + 86, w / 2 + 100, h / 4 + 106, I18n.translate("menu.online"), () -> {
+		getWindow(0).addWidget(
+				new WindowButtonWidget(w / 2 - 100, h / 4 + 86, w / 2 + 100, h / 4 + 106, I18n.translate("menu.online"), () -> {
 					RealmsBridgeScreen realmsBridgeScreen = new RealmsBridgeScreen();
 					realmsBridgeScreen.switchToRealms(client.currentScreen);
 				}));
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
+		getWindow(0).addWidget(
+				new WindowButtonWidget(w / 2 - 124, h / 4 + 86, w / 2 - 104, h / 4 + 106, "MC", () -> {
 					customTitleScreen = !customTitleScreen;
 					BleachFileHelper.saveMiscSetting("customTitleScreen", new JsonPrimitive(false));
 					client.openScreen(new TitleScreen(false));
 				}));
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
+		getWindow(0).addWidget(
+				new WindowButtonWidget(w / 2 - 100, maxY, w / 2 - 2, maxY + 20, I18n.translate("menu.options"), () -> {
 					client.openScreen(new OptionsScreen(client.currentScreen, client.options));
 				}));
-		getWindow(0).buttons.add(
-				new WindowButton(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
+		getWindow(0).addWidget(
+				new WindowButtonWidget(w / 2 + 2, maxY, w / 2 + 100, maxY + 20, I18n.translate("menu.quit"), () -> {
 					client.scheduleStop();
 				}));
 
@@ -122,8 +119,8 @@ public class BleachTitleScreen extends WindowScreen {
 			}
 		});
 
-		getWindow(1).buttons.add(
-				new WindowButton(5, 115, 95, 135, "Update", () -> {
+		getWindow(1).addWidget(
+				new WindowButtonWidget(5, 115, 95, 135, "Update", () -> {
 					try {
 						if (!SystemUtils.IS_OS_WINDOWS) {
 							updaterText = "Updater only supports Windows";
@@ -168,8 +165,8 @@ public class BleachTitleScreen extends WindowScreen {
 					}
 				}));
 
-		getWindow(1).buttons.add(
-				new WindowButton(105, 115, 195, 135, "Github", () -> {
+		getWindow(1).addWidget(
+				new WindowButtonWidget(105, 115, 195, 135, "Github", () -> {
 					Util.getOperatingSystem().open(URI.create("https://github.com/CUPZYY/BleachHack-CupEdition/releases"));
 				}));
 
