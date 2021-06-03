@@ -67,9 +67,10 @@ public class UI extends Module {
 	private long prevTime = 0;
 	private double tps = 20;
 	private long lastPacket = 0;
+	private int chunkSize = 0;
+	private long chunkTimer = 0;
 
 	private ExecutorService chunkExecutor;
-	private Pair<ChunkPos, Future<Integer>> chunkSize;
 
 	public UI() {
 		super("UI", KEY_UNBOUND, Category.RENDER, true, "Shows stuff onscreen.",
@@ -259,31 +260,25 @@ public class UI extends Module {
 		}
 
 		if (getSetting(1).asToggle().getChild(6).asToggle().state) {
-			if (chunkSize != null && new ChunkPos(mc.player.getBlockPos()).equals(chunkSize.getLeft())) {
-				if (chunkSize.getRight().isDone()) {
-					try {
-						int size = chunkSize.getRight().get();
-						infoList.add("Chunk: \u00a7f" + (size < 1000 ? size + "B" : size / 1000d + "KB"));
-					} catch (InterruptedException | ExecutionException e) {
-						e.printStackTrace();
-					}
+			infoList.add("Chunk: \u00a7f" + (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"));
+
+			if (System.currentTimeMillis() - 1500 > chunkTimer) {
+				chunkTimer = System.currentTimeMillis();
+
+				if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
+					new Thread(() -> {
+						CompoundTag tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
+						DataOutputStream output = new DataOutputStream(
+								new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
+						try {
+							NbtIo.writeCompressed(tag, output);
+						} catch (IOException e) {
+							BleachLogger.errorMessage("[ChunkSize] Error serializing chunk");
+						}
+
+						chunkSize = output.size();
+					}).start();
 				}
-			} else if (mc.world.getWorldChunk(mc.player.getBlockPos()) != null) {
-				infoList.add("Chunk: \u00a7fLoading..");
-
-				chunkSize = Pair.of(new ChunkPos(mc.player.getBlockPos()), chunkExecutor.submit(() -> {
-					CompoundTag tag = ClientChunkSerializer.serialize(mc.world, mc.world.getWorldChunk(mc.player.getBlockPos()));
-					DataOutputStream output = new DataOutputStream(
-							new BufferedOutputStream(new DeflaterOutputStream(new ByteArrayOutputStream(8096))));
-					try {
-						NbtIo.writeCompressed(tag, output);
-					} catch (IOException e) {
-						BleachLogger.errorMessage("[ChunkSize] Error serializing chunk");
-						return 0;
-					}
-
-					return output.size();
-				}));
 			}
 		}
 
