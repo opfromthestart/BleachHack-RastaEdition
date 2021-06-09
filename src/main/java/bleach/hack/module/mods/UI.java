@@ -13,11 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,6 +21,7 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.zip.DeflaterOutputStream;
 
+import net.minecraft.item.Items;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.eventbus.Subscribe;
@@ -136,6 +133,10 @@ public class UI extends Module {
 		});
 	}
 
+	public boolean isInEditor() {
+		return mc.currentScreen instanceof UIClickGuiScreen;
+	}
+
 	// --- Module List
 
 	public int[] getModuleListSize() {
@@ -239,6 +240,18 @@ public class UI extends Module {
 	private List<String> getInfoText() {
 		List<String> infoList = new ArrayList<>();
 
+		if (isInEditor()) {
+			infoList.add("\u00a77Time:");
+			infoList.add("XYZ:");
+			infoList.add("\u00a77Server:");
+			infoList.add("Chunk:");
+			infoList.add("FPS:");
+			infoList.add("Ping:");
+			infoList.add("TPS:");
+			infoList.add("\u00a77Speed:");
+			return infoList;
+		}
+
 		if (getSetting(1).asToggle().getChild(6).asToggle().state) {
 			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
 					+ (getSetting(1).asToggle().getChild(6).asToggle().getChild(0).asToggle().state ? " zzz" : "")
@@ -252,7 +265,6 @@ public class UI extends Module {
 			Vec3d vec = mc.player.getPos();
 			BlockPos pos2 = nether ? new BlockPos(vec.getX() * 8, vec.getY(), vec.getZ() * 8)
 					: new BlockPos(vec.getX() / 8, vec.getY(), vec.getZ() / 8);
-
 			infoList.add("XYZ: " + (nether ? "\u00a74" : "\u00a7b") + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 					+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
@@ -403,7 +415,12 @@ public class UI extends Module {
 
 	public void drawLagMeter(MatrixStack matrices, int x, int y) {
 		long time = System.currentTimeMillis();
-		if (time - lastPacket > 500) {
+		if (isInEditor()){
+			String text = "Server Lagging For: xx.xx";
+			int xd = x + 72 - mc.textRenderer.getWidth(text) / 2;
+			mc.textRenderer.drawWithShadow(matrices, text, xd, y + 1, 0xd0d0d0);
+		}
+		else if (time - lastPacket > 500) {
 			String text = "Server Lagging For: " + String.format("%.2f", (time - lastPacket) / 1000d) + "s";
 
 			int xd = x + 72 - mc.textRenderer.getWidth(text) / 2;
@@ -428,47 +445,93 @@ public class UI extends Module {
 	}
 
 	public void drawArmor(MatrixStack matrices, int x, int y) {
-		for (int count = 0; count < mc.player.inventory.armor.size(); count++) {
-			ItemStack is = mc.player.inventory.armor.get(count);
+		if (isInEditor()) {
+			List<ItemStack> list = new ArrayList<>(Arrays.asList(new ItemStack((Items.NETHERITE_HELMET)), new ItemStack((Items.NETHERITE_CHESTPLATE)), new ItemStack((Items.NETHERITE_LEGGINGS)), new ItemStack((Items.NETHERITE_BOOTS))));
+			for (int count = 0; count < list.size(); count++) {
+				ItemStack is = list.get(count);
 
-			if (is.isEmpty())
-				continue;
+				if (is.isEmpty())
+					continue;
 
-			int curX = x + count * 20;
-			RenderSystem.enableDepthTest();
-			mc.getItemRenderer().renderGuiItemIcon(is, curX, y + 4);
-
-			int durcolor = is.isDamageable() ? 0xff000000 | MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F) : 0;
-
-			matrices.push();
-			matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
-			if (getSetting(3).asToggle().getChild(0).asMode().mode > 0 && is.isDamaged()) {
-				int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
-				DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 15, y + 19, 0xff000000);
-				DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 2 + barLength, y + 18, durcolor);
-			}
-
-			if (getSetting(3).asToggle().getChild(0).asMode().mode != 1) {
-				matrices.push();
-				matrices.scale(0.75f, 0.75f, 1f);
-				RenderSystem.disableDepthTest();
-
-				if (is.getCount() > 1) {
-					String s = "x" + is.getCount();
-					mc.textRenderer.drawWithShadow(matrices, s, (curX + 21 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 13) * 1.333f, 0xffffff);
-				}
-
-				if (is.isDamageable()) {
-					String dur = Integer.toString(is.getMaxDamage() - is.getDamage());
-					mc.textRenderer.drawWithShadow(
-							matrices, dur, (curX + 7 - mc.textRenderer.getWidth(dur) * 1.333f / 4) * 1.333f, (y + 1) * 1.333f, durcolor);
-				}
-
+				int curX = x + count * 20;
 				RenderSystem.enableDepthTest();
+				mc.getItemRenderer().renderGuiItemIcon(is, curX, y + 4);
+
+				int durcolor = is.isDamageable() ? 0xff000000 | MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F) : 0;
+
+				matrices.push();
+				matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
+				if (getSetting(3).asToggle().getChild(0).asMode().mode > 0 && is.isDamaged()) {
+					int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
+					DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 15, y + 19, 0xff000000);
+					DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 2 + barLength, y + 18, durcolor);
+				}
+
+				if (getSetting(3).asToggle().getChild(0).asMode().mode != 1) {
+					matrices.push();
+					matrices.scale(0.75f, 0.75f, 1f);
+					RenderSystem.disableDepthTest();
+
+					if (is.getCount() > 1) {
+						String s = "x" + is.getCount();
+						mc.textRenderer.drawWithShadow(matrices, s, (curX + 21 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 13) * 1.333f, 0xffffff);
+					}
+
+					if (is.isDamageable()) {
+						String dur = Integer.toString(is.getMaxDamage() - is.getDamage());
+						mc.textRenderer.drawWithShadow(
+								matrices, dur, (curX + 7 - mc.textRenderer.getWidth(dur) * 1.333f / 4) * 1.333f, (y + 1) * 1.333f, durcolor);
+					}
+
+					RenderSystem.enableDepthTest();
+					matrices.pop();
+				}
+
 				matrices.pop();
 			}
+		} else {
+			for (int count = 0; count < 4; count++) {
+				ItemStack is = mc.player.inventory.armor.get(count);
 
-			matrices.pop();
+				if (is.isEmpty())
+					continue;
+
+				int curX = x + count * 20;
+				RenderSystem.enableDepthTest();
+				mc.getItemRenderer().renderGuiItemIcon(is, curX, y + 4);
+
+				int durcolor = is.isDamageable() ? 0xff000000 | MathHelper.hsvToRgb(((float) (is.getMaxDamage() - is.getDamage()) / is.getMaxDamage()) / 3.0F, 1.0F, 1.0F) : 0;
+
+				matrices.push();
+				matrices.translate(0, 0, mc.getItemRenderer().zOffset + 200);
+				if (getSetting(3).asToggle().getChild(0).asMode().mode > 0 && is.isDamaged()) {
+					int barLength = Math.round(13.0F - is.getDamage() * 13.0F / is.getMaxDamage());
+					DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 15, y + 19, 0xff000000);
+					DrawableHelper.fill(matrices, curX + 2, y + 17, curX + 2 + barLength, y + 18, durcolor);
+				}
+
+				if (getSetting(3).asToggle().getChild(0).asMode().mode != 1) {
+					matrices.push();
+					matrices.scale(0.75f, 0.75f, 1f);
+					RenderSystem.disableDepthTest();
+
+					if (is.getCount() > 1) {
+						String s = "x" + is.getCount();
+						mc.textRenderer.drawWithShadow(matrices, s, (curX + 21 - mc.textRenderer.getWidth(s)) * 1.333f, (y + 13) * 1.333f, 0xffffff);
+					}
+
+					if (is.isDamageable()) {
+						String dur = Integer.toString(is.getMaxDamage() - is.getDamage());
+						mc.textRenderer.drawWithShadow(
+								matrices, dur, (curX + 7 - mc.textRenderer.getWidth(dur) * 1.333f / 4) * 1.333f, (y + 1) * 1.333f, durcolor);
+					}
+
+					RenderSystem.enableDepthTest();
+					matrices.pop();
+				}
+
+				matrices.pop();
+			}
 		}
 	}
 
