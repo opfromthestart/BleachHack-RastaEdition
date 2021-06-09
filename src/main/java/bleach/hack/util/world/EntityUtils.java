@@ -128,5 +128,25 @@ public class EntityUtils {
 		return FacingDirection.North;
 	}
 
+	public static FacingDirection GetMovingDirection(){
+		double tX = mc.player.getX() - mc.player.prevX;
+		double tZ = mc.player.getZ() - mc.player.prevZ;
+		double absTX = Math.abs(tX);
+		double absTZ = Math.abs(tZ);
+		if (tZ < 0 && absTX < absTZ) {
+			return FacingDirection.North;
+		}
+		if (tZ > 0 && absTX < absTZ) {
+			return FacingDirection.South;
+		}
+		if (tX < 0 && absTZ < absTX) {
+			return FacingDirection.West;
+		}
+		if (tX > 0 && absTZ < absTX) {
+			return FacingDirection.East;
+		}
+		return GetFacing();
+	}
+
 }
 

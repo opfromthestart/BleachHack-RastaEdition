@@ -8,6 +8,7 @@
  */
 package bleach.hack.module.mods;
 
+import net.minecraft.block.Blocks;
 import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
@@ -26,11 +27,12 @@ public class Speed extends Module {
 
 	public Speed() {
 		super("Speed", KEY_UNBOUND, Category.MOVEMENT, "Allows you to go faster, what did you expect?",
-				new SettingMode("Mode", "StrafeHop", "Strafe", "OnGround", "MiniHop", "Bhop").withDesc("Speed mode"),
+				new SettingMode("Mode", "StrafeHop", "Strafe", "OnGround", "MiniHop", "Bhop", "EcmeSpeed").withDesc("Speed mode"),
 				new SettingSlider("Strafe", 0.15, 0.4, 0.27, 2).withDesc("Strafe speed"),
 				new SettingSlider("OnGround", 0.1, 10, 2, 1).withDesc("OnGround speed"),
 				new SettingSlider("MiniHop", 0.1, 10, 2, 1).withDesc("MiniHop speed"),
-				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop speed"));
+				new SettingSlider("Bhop", 0.1, 10, 2, 1).withDesc("Bhop speed"),
+				new SettingSlider("EcmeSpeed", 0.15, 1, 0.27, 2).withDesc("Speed"));
 	}
 
 	@Subscribe
@@ -110,6 +112,22 @@ public class Speed extends Module {
 				mc.player.sidewaysSpeed += 3.0F;
 				mc.player.jump();
 				mc.player.setSprinting(true);
+			}
+		}
+		/* EcmeSpeed */
+		else if (getSetting(0).asMode().mode == 5) {
+			if ((mc.player.forwardSpeed != 0 || mc.player.sidewaysSpeed != 0)) {
+				if (!mc.player.isSprinting()) {
+					mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_SPRINTING));
+				}
+
+				if((mc.world.getBlockState(mc.player.getBlockPos().up(2)).getBlock() != Blocks.AIR
+						&& mc.world.getBlockState(mc.player.getBlockPos()).getBlock() != Blocks.LAVA
+						&& mc.player.getHungerManager().getFoodLevel() > 7)){
+					mc.player.setVelocity(new Vec3d(0, mc.player.getVelocity().y, 0));
+					mc.player.updateVelocity(getSetting(5).asSlider().getValueFloat(),
+							new Vec3d(mc.player.sidewaysSpeed, 0, mc.player.forwardSpeed));
+				}
 			}
 		}
 	}
