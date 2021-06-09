@@ -56,7 +56,6 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -69,6 +68,7 @@ public class UI extends Module {
 	private long lastPacket = 0;
 	private int chunkSize = 0;
 	private long chunkTimer = 0;
+	private double speed = 0;
 
 	private ExecutorService chunkExecutor;
 
@@ -88,11 +88,14 @@ public class UI extends Module {
 						new SettingToggle("Ping", true).withDesc("Shows your ping"), // 1-1
 						new SettingToggle("Coords", true).withDesc("Shows your coords and nether coords"), // 1-2
 						new SettingToggle("TPS", true).withDesc("Shows the estimated server tps"), // 1-3
-						new SettingToggle("Server", true).withDesc("Shows the current server you are on"), // 1-4
-						new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 1-5
-								new SettingToggle("Time Zone", false).withDesc("Shows your time zone in the time"), // 1-5-0
-								new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 1-5-1
-						new SettingToggle("ChunkSize", true).withDesc("Shows the data size of the chunk you are standing in")), // 1-6
+						new SettingToggle("Speed", true).withDesc("Shows how fast you are moving").withChildren( // 1-4
+								new SettingMode("Unit", "Blocks", "Feet", "Miles", "KM"), // 1-4-0
+								new SettingMode("Per", "Second", "Tick", "Minute", "Hour", "Day")), // 1-4-1
+						new SettingToggle("Server", true).withDesc("Shows the current server you are on"), // 1-5
+						new SettingToggle("TimeStamp", false).withDesc("Shows the current time").withChildren( // 1-6
+								new SettingToggle("Time Zone", false).withDesc("Shows your time zone in the time"), // 1-6-0
+								new SettingToggle("Year", false).withDesc("Shows the current year in the time")), // 1-6-1
+						new SettingToggle("ChunkSize", true).withDesc("Shows the data size of the chunk you are standing in")), // 1-7
 				new SettingToggle("Players", false).withDesc("Lists all the players in your render distance"), //2
 				new SettingToggle("Armor", true).withDesc("Shows your current armor").withChildren( // 3
 						new SettingMode("Damage", "Number", "Bar", "Both").withDesc("How to show the armor durability")), // 3-0
@@ -236,10 +239,10 @@ public class UI extends Module {
 	private List<String> getInfoText() {
 		List<String> infoList = new ArrayList<>();
 
-		if (getSetting(1).asToggle().getChild(5).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(6).asToggle().state) {
 			infoList.add("\u00a77Time: \u00a7e" + new SimpleDateFormat("MMM dd HH:mm:ss"
-					+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(0).asToggle().state ? " zzz" : "")
-					+ (getSetting(1).asToggle().getChild(5).asToggle().getChild(1).asToggle().state ? " yyyy" : ""))
+					+ (getSetting(1).asToggle().getChild(6).asToggle().getChild(0).asToggle().state ? " zzz" : "")
+					+ (getSetting(1).asToggle().getChild(6).asToggle().getChild(1).asToggle().state ? " yyyy" : ""))
 					.format(new Date()));
 		}
 
@@ -254,12 +257,12 @@ public class UI extends Module {
 					+ " \u00a77[" + (nether ? "\u00a7b" : "\u00a74") + pos2.getX() + " " + pos2.getY() + " " + pos2.getZ() + "\u00a77]");
 		}
 
-		if (getSetting(1).asToggle().getChild(4).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(5).asToggle().state) {
 			String server = mc.getCurrentServerEntry() == null ? "Singleplayer" : mc.getCurrentServerEntry().address;
 			infoList.add("\u00a77Server: \u00a7d" + server);
 		}
 
-		if (getSetting(1).asToggle().getChild(6).asToggle().state) {
+		if (getSetting(1).asToggle().getChild(7).asToggle().state) {
 			infoList.add("Chunk: \u00a7f" + (chunkSize < 1000 ? chunkSize + "B" : chunkSize / 1000d + "KB"));
 
 			if (System.currentTimeMillis() - 1500 > chunkTimer) {
@@ -305,6 +308,44 @@ public class UI extends Module {
 				suffix += ".";
 
 			infoList.add("TPS: " + getColorString((int) tps, 18, 15, 12, 8, 4, false) + tps + suffix);
+		}
+
+		if (getSetting(1).asToggle().getChild(4).asToggle().state) {
+			Vec3d move = new Vec3d(mc.player.getX() - mc.player.prevX, 0, mc.player.getZ() - mc.player.prevZ).multiply(20);
+			int distanceMode = getSetting(1).asToggle().getChild(4).asToggle().getChild(0).asMode().mode;
+			int timeMode = getSetting(1).asToggle().getChild(4).asToggle().getChild(1).asMode().mode;
+			switch (distanceMode) {
+				case 0:
+					break;
+				case 1:
+					move = move.multiply(3.281);
+					break;
+				case 2:
+					move = move.multiply(0.000621371);
+					break;
+				case 3:
+					move = move.multiply(0.001);
+					break;
+			}
+			float time = 1;
+			switch (timeMode) {
+				case 0:
+					break;
+				case 1:
+					time /= 20;
+					break;
+				case 2:
+					time *= 60;
+					break;
+				case 3:
+					time *= 3600;
+					break;
+				case 4:
+					time *= 86400;
+					break;
+			}
+
+			infoList.add("\u00a77Speed: \u00a7d" + String.format("%.2f %s/%s", (Math.abs(MathHelper.sqrt(move.x * move.x + move.z * move.z)) * time), getSetting(1).asToggle().getChild(4).asToggle().getChild(0).asMode().modes[distanceMode], getSetting(1).asToggle().getChild(4).asToggle().getChild(1).asMode().modes[timeMode]));
 		}
 
 		return infoList;
