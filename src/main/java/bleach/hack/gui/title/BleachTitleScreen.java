@@ -171,7 +171,7 @@ public class BleachTitleScreen extends WindowScreen {
 				}));
 
 		if (version == null) {
-			version = CupGithubReader.readJson("autoupdate", SharedConstants.getGameVersion().getName() + ".json");
+			version = CupGithubReader.readJson("autoupdate", SharedConstants.getGameVersion().getName().replace(' ', '_') + ".json");
 
 			if (version == null) {
 				version = new JsonObject();
