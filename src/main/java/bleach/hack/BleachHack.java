@@ -71,7 +71,8 @@ public class BleachHack implements ModInitializer {
 		BleachFileHelper.readUI();
 
 		CommandManager.readPrefix();
-		CommandSuggestor.init();
+		CommandManager.loadCommands(this.getClass().getClassLoader().getResourceAsStream("bleachhack.commands.json"));
+		CommandSuggestor.start();
 		BleachFileMang.deleteFile("temp");
 
 		JsonElement mainMenu = BleachFileHelper.readMiscSetting("customTitleScreen");
