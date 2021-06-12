@@ -67,7 +67,7 @@ public class InventoryUtils {
 						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, slot, 0, SlotActionType.PICKUP, mc.player);
 						mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 36 + i, 0, SlotActionType.PICKUP, mc.player);
 						mc.player.inventory.selectedSlot = i;
-						mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
+						mc.player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(i));
 						return Hand.MAIN_HAND;
 					}
 				}
