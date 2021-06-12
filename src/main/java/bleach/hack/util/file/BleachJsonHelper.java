@@ -18,6 +18,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
+import bleach.hack.BleachHack;
+
 public class BleachJsonHelper {
 
 	private static Gson jsonWriter = new GsonBuilder().setPrettyPrinting().create();
@@ -87,18 +89,18 @@ public class BleachJsonHelper {
 		try {
 			return new JsonParser().parse(merged).getAsJsonObject();
 		} catch (JsonParseException e) {
-			System.err.println("Json error Trying to read " + Arrays.asList(path) + "! DELETING ENTIRE FILE!");
+			BleachHack.logger.error("Json error Trying to read " + Arrays.asList(path) + "! DELETING ENTIRE FILE!");
 			e.printStackTrace();
 
 			BleachFileMang.deleteFile(path);
 			return null;
 		}
 	}
-	
+
 	public static String formatJson(String json) {
 		return jsonWriter.toJson(new JsonParser().parse(json));
 	}
-	
+
 	public static String formatJson(JsonElement json) {
 		return jsonWriter.toJson(json);
 	}
