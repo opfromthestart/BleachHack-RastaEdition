@@ -5,11 +5,12 @@ import bleach.hack.module.Category;
 import bleach.hack.module.Module;
 import bleach.hack.setting.base.SettingSlider;
 import bleach.hack.util.FabricReflect;
+import com.google.common.collect.Sets;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 
-import java.util.Arrays;
+import java.util.Set;
 
 public class IceSpeed extends Module {
 
