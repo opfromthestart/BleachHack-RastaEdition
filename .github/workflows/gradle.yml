@@ -15,13 +15,18 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
-    - name: Upload Artifact
+    
+    - name: build 1.16
+      run: |
+        cd CupEdition-1.16
+        chmod +x gradlew
+        ./gradlew build
+        cd ..
+        
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: BH-CupEdition
         path: build/libs/bleachhack-cupedition-1.3.jar
+    
         
