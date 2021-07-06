@@ -118,18 +118,10 @@ public class AutoBedrockBreak extends Module {
             ;
         }
         switch (direction) {
-            case "west":
-                coords = lookingCoords.north().east().up();
-                break;
-            case "east":
-                coords = lookingCoords.south().west().up();
-                break;
-            case "north":
-                coords = lookingCoords.east().south().up();
-                break;
-            case "south":
-                coords = lookingCoords.west().north().up();
-                break;
+            case "west" -> coords = lookingCoords.north().east().up();
+            case "east" -> coords = lookingCoords.south().west().up();
+            case "north" -> coords = lookingCoords.east().south().up();
+            case "south" -> coords = lookingCoords.west().north().up();
         }
     }
 
