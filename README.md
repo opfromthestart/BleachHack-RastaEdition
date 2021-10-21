@@ -1,19 +1,11 @@
 
-# BleachHack CupEdition
-![](https://img.shields.io/tokei/lines/github/CUPZYY/BleachHack-CupEdition?style=flat-square)
-![](https://img.shields.io/github/languages/code-size/CUPZYY/BleachHack-CupEdition?style=flat-square)
-![](https://img.shields.io/github/last-commit/CUPZYY/BleachHack-CupEdition?style=flat-square)
-![](https://img.shields.io/badge/daily%20commit-bruh%20ofc-blue?style=flat-square)
+# BleachHack RastaEdition
 
 My edition of bleachhack
 
-Works on fabric 1.17
+Works on fabric 1.17.1
 
 Credits to [@BleachDrinker420](https://github.com/BleachDrinker420) and [CUPZZY](https://cupzyy.tk/)
-
-## Images
-![ClickGUI](https://i.imgur.com/gCbCclj.png)
-![GamePlay](https://i.imgur.com/SqbinM6.jpg)
 
 ## The original BleachHack
 > Website: https://bleachhack.github.io/  
@@ -21,10 +13,10 @@ Credits to [@BleachDrinker420](https://github.com/BleachDrinker420) and [CUPZZY]
 
 ## Installation
 
-Download [fabric for minecraft 1.16](https://fabricmc.net/use/).
-Download the [latest version of BleachHack CupEdition](https://github.com/CUPZYY/BleachHack-CupEdition/releases)
+Download [fabric for minecraft 1.17.1](https://fabricmc.net/use/).
+Download the [latest version of BleachHack RastaEdition](https://github.com/opfromthestart/BleachHack-RastaEdition/releases)
 
-Put the bleachhack cupedition jar file in the mods folder in .minecraft
+Put the bleachhack rastaedition jar file in the mods folder in .minecraft
 
 ## License
 
