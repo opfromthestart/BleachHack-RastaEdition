@@ -7,7 +7,7 @@
 
 My edition of bleachhack
 
-Works on fabric 1.16.5
+Works on fabric 1.17
 
 Credits to [@BleachDrinker420](https://github.com/BleachDrinker420)
 
