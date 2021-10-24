@@ -3,15 +3,16 @@
   "id": "bleachhack",
   "version": "1.5",
 
-  "name": "BleachHack-CupEdition",
-  "description": "gamer hack",
+  "name": "BleachHack-RastaEdition",
+  "description": "Rasta hack",
   "authors": [
     "Bleach#0136",
-    "CUPZYY#5075"
+    "CUPZYY#5075",
+    "opfromthestart#2129"
   ],
   "contact": {
-    "homepage": "https://github.com/CUPZYY/",
-    "sources": "https://github.com/CUPZYY/BleachHack-CupEdition"
+    "homepage": "https://github.com/opfromthestart/",
+    "sources": "https://github.com/opfromthestart/BleachHack-RastaEdition"
   },
 
   "license": "CC0-1.0",

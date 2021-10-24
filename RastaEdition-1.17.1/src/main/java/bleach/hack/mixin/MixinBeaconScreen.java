@@ -38,7 +38,7 @@ public abstract class MixinBeaconScreen extends HandledScreen<BeaconScreenHandle
 		addDrawableChild(new ButtonWidget((width - backgroundWidth) / 2 + 2, (height - backgroundHeight) / 2 - 15, 46, 14, new LiteralText("Unlock"), button -> unlocked = true));
 	}
 
-	@Inject(method = "tick", at = @At("RETURN"))
+	@Inject(method = "handledScreenTick", at = @At("RETURN"))
 	public void tick(CallbackInfo ci) {
 		if (unlocked) {
 			for (Drawable b: ((AccessorScreen) this).getDrawables()) {

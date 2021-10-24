@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "bleach.hack.mixin",
+  "refmap": "bleachhack-rastaedition-refmap.json",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
   ],
@@ -59,8 +60,7 @@
     "MixinTitleScreen",
     "MixinVoxelShapes",
     "MixinWorldRenderer",
-    "StrongholdList",
-    "IStronghold"
+    "StrongholdList"
   ],
   "injectors": {
     "defaultRequire": 1
