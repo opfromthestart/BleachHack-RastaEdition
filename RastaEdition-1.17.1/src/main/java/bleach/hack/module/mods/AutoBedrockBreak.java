@@ -10,7 +10,6 @@
  */
 package bleach.hack.module.mods;
 
-import bleach.hack.eventbus.BleachSubscribe;
 import bleach.hack.event.events.EventInteract;
 import bleach.hack.event.events.EventTick;
 import bleach.hack.event.events.EventWorldRender;
@@ -21,6 +20,7 @@ import bleach.hack.util.BleachLogger;
 import bleach.hack.util.InventoryUtils;
 import bleach.hack.util.render.RenderUtils;
 import bleach.hack.util.render.color.QuadColor;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.PistonBlock;
@@ -41,12 +41,15 @@ import java.util.List;
 
 public class AutoBedrockBreak extends Module {
 
-    private List<TargetBlock> posList;
+    private List<TargetBlock> blockList;
+    private List<BlockPos> posList;
+    private boolean isTicking;
 
     public AutoBedrockBreak() {
         super("AutoBedrockBreak", KEY_UNBOUND, Category.EXPLOITS, "Automatically does the bedrock break exploit.",
                 new SettingToggle("Use TNT", true).withDesc("Use the original tnt method."));
 
+        blockList = new ArrayList<>();
         posList = new ArrayList<>();
     }
 
@@ -57,34 +60,46 @@ public class AutoBedrockBreak extends Module {
         super.onDisable();
     }
 
-    @BleachSubscribe
+    @Subscribe
     public void onTick(EventTick event) {
-        for (TargetBlock tb : posList)
+        isTicking = true;
+        for (TargetBlock tb : blockList)
         {
             tb.tick();
+            if (tb.isDone())
+            {
+                posList.remove(tb.getBlockPos());
+                blockList.remove(tb);
+            }
         }
+        isTicking = false;
     }
 
-    @BleachSubscribe
+    @Subscribe
     public void onWorldRender(EventWorldRender.Post event) {
         if (mc.crosshairTarget instanceof BlockHitResult
-                && !mc.world.isAir(((BlockHitResult) mc.crosshairTarget).getBlockPos())) {
+                && !mc.world.isAir(((BlockHitResult) mc.crosshairTarget).getBlockPos())
+                && mc.world.getBlockState(((BlockHitResult) mc.crosshairTarget).getBlockPos()).getBlock()==Blocks.BEDROCK) {
             RenderUtils.drawBoxOutline(((BlockHitResult) mc.crosshairTarget).getBlockPos(), QuadColor.single(0xffc040c0), 2f);
         }
-        for (TargetBlock tb : posList) {
-            RenderUtils.drawBoxOutline(tb.getBlockPos(), QuadColor.single(0xffc080c0), 2f);
+        for (BlockPos bp : posList) {
+            RenderUtils.drawBoxOutline(bp, QuadColor.single(0x2020ffc0), 2f);
         }
     }
 
-    @BleachSubscribe
+    @Subscribe
     public void onInteract(EventInteract.InteractBlock event) {
-        if (!mc.world.isAir(event.getHitResult().getBlockPos())) {
-            posList.add( new TargetBlock(event.getHitResult().getBlockPos(), mc, getSetting(0).asToggle().state));
-            event.setCancelled(true);
+        if (!mc.world.isAir(event.getHitResult().getBlockPos()) && mc.world.getBlockState(event.getHitResult().getBlockPos()).getBlock()==Blocks.BEDROCK) {
+            if (posList.isEmpty()) {
+                blockList.add(new TargetBlock(event.getHitResult().getBlockPos(), mc, getSetting(0).asToggle().state));
+                posList.add(event.getHitResult().getBlockPos());
+                event.setCancelled(true);
+            }
         }
     }
 
     private void reset() {
+        blockList = new ArrayList<>();
         posList = new ArrayList<>();
     }
 }
@@ -132,7 +147,7 @@ class TargetBlock {
         if (useTnt) {
             switch (step) {
                 case 0:
-                    if (!world.isSpaceEmpty(new Box(blockPos.up(), blockPos.add(1, 8, 1)))) {
+                    if (!world.isSpaceEmpty(new Box(blockPos.up(), blockPos.add(1, 7, 0)))) {
                         this.status = Status.FAILED;
                         BleachLogger.infoMessage("Not enough empty space to break this block!");
                     } else if (InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON) == -1) {
@@ -213,9 +228,10 @@ class TargetBlock {
         } else {
             switch (this.status) {
                 case UNINITIALIZED:
+                    mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.getYaw(), 90, mc.player.isOnGround()));
 
                     dirtyPlace(pistonBlockPos, InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON), Direction.UP);
-                    dirtyPlace(redstoneTorchBlockPos, InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_TORCH), Direction.DOWN);
+                    dirtyPlace(redstoneTorchBlockPos, InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.REDSTONE_TORCH), Direction.UP);
                     break;
                 case UNEXTENDED_WITH_POWER_SOURCE:
                     break;
@@ -228,6 +244,7 @@ class TargetBlock {
                     //打掉活塞
                     breakBlock(this.pistonBlockPos);
                     //放置朝下的活塞
+                    mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.getYaw(), -90, mc.player.isOnGround()));
                     dirtyPlace(pistonBlockPos, InventoryUtils.getSlot(true, i -> mc.player.getInventory().getStack(i).getItem() == Items.PISTON), Direction.DOWN);
                     this.hasTried = true;
                     break;
@@ -268,6 +285,11 @@ class TargetBlock {
         RETRACTING,
         RETRACTED,
         STUCK;
+    }
+
+    public boolean isDone()
+    {
+        return world.getBlockState(blockPos).getBlock() == Blocks.AIR;
     }
 
     private boolean dirtyPlace(BlockPos pos, int slot, Direction dir) {
@@ -390,7 +412,7 @@ class TargetBlock {
     }
 
     public void breakBlock(BlockPos pos) {
-        InventoryUtils.getSlot(true, i -> (mc.player.getInventory().getStack(i).getItem() == Items.DIAMOND_PICKAXE || mc.player.getInventory().getStack(i).getItem() == Items.NETHERITE_PICKAXE));
+        InventoryUtils.selectSlot(InventoryUtils.getSlot(true, i -> (mc.player.getInventory().getStack(i).getItem() == Items.DIAMOND_PICKAXE || mc.player.getInventory().getStack(i).getItem() == Items.NETHERITE_PICKAXE)));
         mc.interactionManager.attackBlock(pos, Direction.UP);
     }
 }
