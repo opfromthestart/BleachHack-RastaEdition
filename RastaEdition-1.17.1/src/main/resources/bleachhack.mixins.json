@@ -58,7 +58,9 @@
     "MixinSoundSystem",
     "MixinTitleScreen",
     "MixinVoxelShapes",
-    "MixinWorldRenderer"
+    "MixinWorldRenderer",
+    "StrongholdList",
+    "IStronghold"
   ],
   "injectors": {
     "defaultRequire": 1
